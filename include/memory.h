@@ -1,6 +1,7 @@
 #ifndef _MEMORYPULL_
 #define _MEMORYPULL_
 
+#include <iostream>
 
 
 
@@ -8,22 +9,23 @@ class StoragePool{
 	
 	public :
 		virtual ~StoragePool();
-		virutal void * Allocate(size_t) = 0;
-		virutal void Free (void  * ) = 0;
+		virtual void * Allocate(std::size_t) = 0 ;
+		virtual void Free (void *) = 0;
+
 		struct  Tag {StoragePool * pool;};
 
-		void *operator new (size_t bytes, StoragePool &p ){
+		void* operator new (std::size_t bytes, StoragePool &p ){
 			Tag * const tag = reinterpret_cast<Tag *> (p.Allocate(bytes + sizeof(Tag)));
 			tag->pool = &p;
 
 			return tag + 1u; 
 		}
-		void * operator new (size_t bytes ) {
+		void*  operator new (std::size_t bytes ) {
 			Tag * const tag = reinterpret_cast<Tag *> (std::malloc(bytes + sizeof(Tag)));
 			tag->pool = nullptr;
 			return (reinterpret_cast<void*>(tag + 1u));
 		}
-		void * operator delete (void * arg) noexcept {
+		void  operator delete (void * arg){
 			Tag * const tag = reinterpret_cast<Tag *>(arg) - 1u;
 			if (nullptr != tag->pool)
 			{
@@ -46,7 +48,7 @@ class SLLPool : public StoragePool {
 			unsigned int Lenght;
 			Header() : Lenght(0u){};
 		};
-		struct block: public Header{
+		struct Block: public Header{
 
 			enum { BlockSize = 16};
 			union {
@@ -64,8 +66,11 @@ class SLLPool : public StoragePool {
 		Block &mt_Sentinel; /* Lis's End*/
 
 	public:
-		explicit SLLPool(size_t);
+		explicit SLLPool(std::size_t);
 		~SLLPool();
+		void * Allocate(std::size_t);
+		void  Free(void *);
+
 }; 
 
 #endif
