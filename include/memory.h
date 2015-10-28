@@ -2,13 +2,13 @@
 #define _MEMORYPULL_
 
 #include <iostream>
-
+#include <cstdlib>
 
 
 class StoragePool{
 	
-	public :
-		virtual ~StoragePool();
+	public:
+		~StoragePool() {};
 		virtual void * Allocate(std::size_t) = 0 ;
 		virtual void Free (void *) = 0;
 
@@ -63,13 +63,13 @@ class SLLPool : public StoragePool {
 	private:
 		unsigned int NumberOfBlocks;
 		Block *mp_Pool; /* List's Head */
-		Block &mt_Sentinel; /* Lis's End*/
+		Block *mt_Sentinel; /* Lis's End*/
 
 	public:
-		explicit SLLPool(std::size_t);
+		explicit SLLPool(std::size_t bytes);
 		~SLLPool();
-		void * Allocate(std::size_t);
-		void  Free(void *);
+		void * Allocate(std::size_t bytes);
+		void  Free(void * fre);
 
 }; 
 
