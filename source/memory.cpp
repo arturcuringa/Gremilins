@@ -1,6 +1,5 @@
 #include "memory.h"
 
-
 /* /brief Simle Linked List Memory Pool constructor*/
 SLLPool::SLLPool(std::size_t bytes){
 	
@@ -35,10 +34,49 @@ SLLPool::~SLLPool(){
 
 }
 
+/* \brief Allocates memory to user, method inside new(Pool) overloaded method*/
 void*
 SLLPool::Allocate(std::size_t bytes){
 
-	//stub
+	//Calculats the numbers of blocks needed
+	unsigned int BlocksNeed = bytes/16;
+
+	//Block Pointer Right Had side -> Selected Block 
+	Block* _rhs = this->mt_Sentinel;
+
+	//Block Pointer Ledft Hand Side -> Previous selected Block
+	Block* _lrs  = nullptr;
+	
+	//Loop until find empty block with enought space to fit user's stuff
+	while(_rhs != nullptr){
+
+
+		//Points to previous Block
+		_lrs = _rhs;
+
+		//Points to Next empty block 
+		_rhs = _rhs->mp_Next;
+
+		if (_rhs->Lenght == BlocksNeed )
+		{
+			//Stub
+		}
+		if (_rhs->Lenght > BlocksNeed)
+		{
+			//Determine the Lenght of new empty block
+			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
+
+			//Determine Mp-next, next empt space
+			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
+
+			//Make conecton between previous and next Block
+			_lrs->mp_Next = _rhs+BlocksNeed;
+
+			return static_cast<void*>(_rhs);
+		}
+
+	}
+
 
 	return nullptr;
 }
