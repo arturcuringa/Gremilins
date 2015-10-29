@@ -81,7 +81,9 @@ SLLPool::Allocate(std::size_t bytes){
 		}
 
 	}
-
+	//Throw Bad_alloc if MemoryPull can't fit the memory request
+	if (_rhs == nullptr)
+		throw std::bad_alloc();
 
 	return nullptr;
 }

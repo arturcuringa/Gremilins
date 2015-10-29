@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <new>
-
+#include <exception>
 
 
 class StoragePool{
