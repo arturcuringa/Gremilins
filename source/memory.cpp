@@ -4,7 +4,7 @@
 SLLPool::SLLPool(std::size_t bytes){
 	
 	//By the size passed in the constructor, calculates the number of bocks 	
-	this->NumberOfBlocks = bytes/16;
+	this->NumberOfBlocks = (bytes+ sizeof(Header))/sizeof(Block);
 
 	//Creats an array of blocks to be used as memory pool
 	this->mp_Pool = new Block[NumberOfBlocks];
@@ -39,7 +39,7 @@ void*
 SLLPool::Allocate(std::size_t bytes){
 
 	//Calculats the numbers of blocks needed
-	unsigned int BlocksNeed = bytes/16;
+	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
 
 	//Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = this->mt_Sentinel;
@@ -59,7 +59,11 @@ SLLPool::Allocate(std::size_t bytes){
 
 		if (_rhs->Lenght == BlocksNeed )
 		{
-			//Stub
+			//Pasing exact size to user
+			_lrs->mp_Next = _rhs->mp_Next;
+
+			//Return the exatc location to user data AFTER the Header 
+			return static_cast<void*>(_rhs + sizeof(Header) );
 		}
 		if (_rhs->Lenght > BlocksNeed)
 		{
@@ -72,7 +76,8 @@ SLLPool::Allocate(std::size_t bytes){
 			//Make conecton between previous and next Block
 			_lrs->mp_Next = _rhs+BlocksNeed;
 
-			return static_cast<void*>(_rhs);
+			//Return the exatc location to user data AFTER the Header 
+			return static_cast<void*>(_rhs + sizeof(Header) );
 		}
 
 	}
