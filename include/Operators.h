@@ -37,5 +37,13 @@ struct  Tag {StoragePool * pool;};
 			tag->pool = nullptr;
 			return (reinterpret_cast<void*>(tag + 1u));
 		}
-
+		void  operator delete[] (void * arg){
+			Tag * const tag = reinterpret_cast<Tag *>(arg) - 1u;
+			if (nullptr != tag->pool)
+			{
+				tag->pool->Free(tag);
+			}
+			else
+				std::free(tag);
+		}
 #endif

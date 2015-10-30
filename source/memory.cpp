@@ -54,14 +54,14 @@ SLLPool::Allocate(std::size_t bytes){
 	Block* _rhs = this->mt_Sentinel;
 
 	//Block Pointer Ledft Hand Side -> Previous selected Block
-	Block* _lrs  = nullptr;
+	Block* _lhs  = nullptr;
 	
 	//Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != nullptr){
 
 
 		//Points to previous Block
-		_lrs = _rhs;
+		_lhs = _rhs;
 
 		//Points to Next empty block 
 		_rhs = _rhs->mp_Next;
@@ -71,7 +71,7 @@ SLLPool::Allocate(std::size_t bytes){
 		if (_rhs->Lenght == BlocksNeed )
 		{
 			//Pasing exact size to user
-			_lrs->mp_Next = _rhs->mp_Next;
+			_lhs->mp_Next = _rhs->mp_Next;
 
 			//Return the exatc location to user data AFTER the Header 
 			return static_cast<void*>(_rhs + sizeof(Header) );
@@ -86,7 +86,7 @@ SLLPool::Allocate(std::size_t bytes){
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
 
 			//Make conecton between previous and next Block
-			_lrs->mp_Next = (_rhs+BlocksNeed);
+			_lhs->mp_Next = (_rhs+BlocksNeed);
 
 			//Return the exatc location to user data AFTER the Header 
 			return static_cast<void*>(_rhs + sizeof(Header) );
@@ -103,6 +103,17 @@ SLLPool::Allocate(std::size_t bytes){
 
 void
 SLLPool::Free(void * fre){
+	fre = static_cast<Block*>(fre);
+	Block* _rhs;
+	Block* _lhs;
 
-	//stub
+	_rhs = this->mt_Sentinel;
+	_lhs = nullptr;
+
+	//while(_rhs != nullptr){
+
+
+	//}
+
+
 }

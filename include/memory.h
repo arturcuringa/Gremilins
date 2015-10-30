@@ -10,7 +10,7 @@
 class StoragePool{
 	
 	public:
-		~StoragePool() {};
+		virtual ~StoragePool() {};
 		virtual void * Allocate(std::size_t) = 0 ;
 		virtual void Free (void *) = 0;
 
