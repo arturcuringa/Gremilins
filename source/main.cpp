@@ -51,6 +51,6 @@ int main (){
 	int * k = new int;
 	delete k;
 	delete a;
-
+	delete b;
 	return 0;
 }
