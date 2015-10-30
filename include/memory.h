@@ -41,7 +41,7 @@ class SLLPool : public StoragePool {
 	private:
 		unsigned int NumberOfBlocks;
 		Block *mp_Pool; /* List's Head */
-		Block *mt_Sentinel; /* Lis's End*/
+		Block *mt_Sentinel; /* List's End*/
 
 	public:
 		explicit SLLPool(std::size_t bytes);

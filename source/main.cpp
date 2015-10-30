@@ -6,15 +6,35 @@
 
 int main (){
 	
-	SLLPool p(200);
+	SLLPool p(400);
 
-	int *k;
+	int* a, *b, *c ,*d, *e, *f , *g;
 
-	k = new(p) int;
+	a = new(p) int;
+	b = new(p) int;
+	c = new(p) int;
+	d = new(p) int;
+	e = new(p) int;
+	f = new(p) int;
+	g = new(p) int;
 
-	*k = 5;
 
-	std::cout<<*k<<"\n";
+	*a = 5;
+	*b = 6;
+	*c = 7;
+	*d = 8; 
+	*e = 9;
+	*f = 10;
+	*g = 11;
+
+
+	std::cout<<*a<<"\n";
+	std::cout<<*b<<"\n";
+	std::cout<<*c<<"\n";
+	std::cout<<*d<<"\n";
+	std::cout<<*e<<"\n";
+	std::cout<<*f<<"\n";
+	std::cout<<*g<<"\n";
 
 	return 0;
 }

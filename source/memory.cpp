@@ -5,10 +5,16 @@ SLLPool::SLLPool(std::size_t bytes){
 	
 	//By the size passed in the constructor, calculates the number of bocks 	
 	this->NumberOfBlocks = (bytes+ sizeof(Header))/sizeof(Block);
-
+	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
+	{
+		NumberOfBlocks++;
+	}
+	std::cout<<"Number Of Blocks: "<<NumberOfBlocks<<"\n";
 	//Creats an array of blocks to be used as memory pool
+
 	this->mp_Pool = new Block[NumberOfBlocks];
 
+	std::cout<<"mp_Pool Adress: "<<mp_Pool<<"\n";
 	//Reduces one block of usage for sentinel Node
 	this->NumberOfBlocks--;
 
@@ -40,7 +46,10 @@ SLLPool::Allocate(std::size_t bytes){
 
 	//Calculats the numbers of blocks needed
 	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
-
+	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
+	{
+		BlocksNeed++;
+	}
 	//Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = this->mt_Sentinel;
 
@@ -57,6 +66,8 @@ SLLPool::Allocate(std::size_t bytes){
 		//Points to Next empty block 
 		_rhs = _rhs->mp_Next;
 
+		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
+
 		if (_rhs->Lenght == BlocksNeed )
 		{
 			//Pasing exact size to user
@@ -67,14 +78,15 @@ SLLPool::Allocate(std::size_t bytes){
 		}
 		if (_rhs->Lenght > BlocksNeed)
 		{
+			std::cout<<_rhs->Lenght<<"\n";
 			//Determine the Lenght of new empty block
 			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
-
+			std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
 			//Determine Mp-next, next empt space
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
 
 			//Make conecton between previous and next Block
-			_lrs->mp_Next = _rhs+BlocksNeed;
+			_lrs->mp_Next = (_rhs+BlocksNeed);
 
 			//Return the exatc location to user data AFTER the Header 
 			return static_cast<void*>(_rhs + sizeof(Header) );
