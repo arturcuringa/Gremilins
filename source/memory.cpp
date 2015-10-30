@@ -40,44 +40,50 @@ SLLPool::Allocate(std::size_t bytes){
 
 	//Calculats the numbers of blocks needed
 	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
-
+	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
+	{
+		BlocksNeed++;
+	}
 	//Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = this->mt_Sentinel;
 
 	//Block Pointer Ledft Hand Side -> Previous selected Block
-	Block* _lrs  = nullptr;
+	Block* _lhs  = nullptr;
 	
 	//Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != nullptr){
 
 
 		//Points to previous Block
-		_lrs = _rhs;
+		_lhs = _rhs;
 
 		//Points to Next empty block 
 		_rhs = _rhs->mp_Next;
 
+		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
+
 		if (_rhs->Lenght == BlocksNeed )
 		{
 			//Pasing exact size to user
-			_lrs->mp_Next = _rhs->mp_Next;
+			_lhs->mp_Next = _rhs->mp_Next;
 
-			//Return the exatc location to user data AFTER the Header 
-			return static_cast<void*>(_rhs + sizeof(Header) );
+			//Return the exatc location to user data
+			return static_cast<void*>(_rhs);
 		}
 		if (_rhs->Lenght > BlocksNeed)
 		{
+			std::cout<<_rhs->Lenght<<"\n";
 			//Determine the Lenght of new empty block
 			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
-
+			std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
 			//Determine Mp-next, next empt space
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
 
 			//Make conecton between previous and next Block
-			_lrs->mp_Next = _rhs+BlocksNeed;
+			_lhs->mp_Next = (_rhs+BlocksNeed);
 
-			//Return the exatc location to user data AFTER the Header 
-			return static_cast<void*>(_rhs + sizeof(Header) );
+			//Return the exatc location to user data 
+			return static_cast<void*>(_rhs) ;
 		}
 
 	}
@@ -91,6 +97,6 @@ SLLPool::Allocate(std::size_t bytes){
 
 void
 SLLPool::Free(void * fre){
-
+	 
 	//stub
 }
