@@ -7,7 +7,7 @@
 int main (){
 	
 	SLLPool p(400);
-
+	SLLPool q(800);
 	int* a, *b, *c ,*d, *e, *f , *g;
 
 	a = new(p) int;
@@ -35,6 +35,19 @@ int main (){
 	std::cout<<*e<<"\n";
 	std::cout<<*f<<"\n";
 	std::cout<<*g<<"\n";
+
+
+	int* vec = new(q) int[10];
+
+	for (int i = 0; i < 10; ++i)
+	{
+		vec[i] = i;
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		std::cout<<"vec["<<i<<"]: "<<i<<"\n";
+	}
 
 	return 0;
 }
