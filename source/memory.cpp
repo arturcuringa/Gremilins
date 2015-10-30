@@ -70,11 +70,12 @@ SLLPool::Allocate(std::size_t bytes){
 
 		if (_rhs->Lenght == BlocksNeed )
 		{
+
 			//Pasing exact size to user
 			_lhs->mp_Next = _rhs->mp_Next;
 
 			//Return the exatc location to user data
-			return static_cast<void*>(_rhs + sizeof(Header) );
+			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
 		if (_rhs->Lenght > BlocksNeed)
 		{
@@ -102,7 +103,7 @@ SLLPool::Allocate(std::size_t bytes){
 	//Throw Bad_alloc if MemoryPull can't fit the memory request
 	if (_rhs == nullptr)
 		throw std::bad_alloc();
-
+	std::cout<<"bug";
 	return nullptr;
 }
 
@@ -113,7 +114,7 @@ SLLPool::Free(void * fre){
 	Block* now = static_cast<Block*>(reinterpret_cast<Header*>(fre) - 1u);
 	//stub
 	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
-
+	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
 	
 	Block* prev;
 	Block* next;
@@ -141,7 +142,83 @@ SLLPool::Free(void * fre){
 	
 
 
-	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
+	
 	//now = nullptr;
 	return ;
+}
+void *
+BestSLLPool::Allocate(std::size_t bytes){
+
+	//Calculats the numbers of blocks needed
+	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
+	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
+	{
+		BlocksNeed++;
+	}
+	//Block Pointer Right Had side -> Selected Block 
+	Block* _rhs = this->mt_Sentinel;
+
+	//Block Pointer Ledft Hand Side -> Previous selected Block
+	Block* _lhs  = nullptr;
+	
+	unsigned int difLenght = NumberOfBlocks + 1;
+	Block* difPointer;
+	Block* prevdifP;
+	//Loop until find empty block with enought space to fit user's stuff
+	while(_rhs != nullptr){
+
+
+		//Points to previous Block
+		_lhs = _rhs;
+
+		//Points to Next empty block 
+		_rhs = _rhs->mp_Next;
+
+		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
+
+		if (_rhs->Lenght == BlocksNeed )
+		{
+
+			//Pasing exact size to user
+			_lhs->mp_Next = _rhs->mp_Next;
+
+			//Return the exatc location to user data
+			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
+		}
+		if (_rhs->Lenght > BlocksNeed)
+		{
+			if (_rhs->Lenght - BlocksNeed < difLenght )
+			{
+				difPointer = _rhs;
+				prevdifP = _lhs;
+			}
+		}
+
+	}
+	if (difPointer->Lenght > BlocksNeed)
+	{
+		(difPointer+BlocksNeed)->Lenght = difPointer->Lenght - BlocksNeed;
+
+		//Quantidade de Blocos a serem alocados
+		difPointer->Lenght = BlocksNeed;
+
+		std::cout<<"Next Empty Block Adress after allocation: "<<(difPointer+BlocksNeed)<<"\n";
+		//Determine Mp-next, next empt space
+		(difPointer+BlocksNeed)->mp_Next = difPointer->mp_Next;
+
+		//Make conecton between previous and next Block
+		prevdifP->mp_Next = (difPointer+BlocksNeed);
+		
+		/*Return the exatc location to user data by converting difPointer to Header*
+			add +1 and converting to void *
+		  */ 
+		return static_cast<void*>(reinterpret_cast<Header*>(difPointer) + 1u );
+	}
+	//Throw Bad_alloc if MemoryPull can't fit the memory request
+	else
+		throw std::bad_alloc();
+	std::cout<<"bug";
+	return nullptr;
+
+
 }

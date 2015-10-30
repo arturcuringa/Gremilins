@@ -52,5 +52,12 @@ int main (){
 	delete k;
 	delete a;
 	delete b;
+
+	int *j = new(p) int[5];
+
+	delete[] j;
+
+	BestSLLPool z(400);
+
 	return 0;
 }

@@ -38,7 +38,7 @@ class SLLPool : public StoragePool {
 
 		}; 
 
-	private:
+	protected:
 		unsigned int NumberOfBlocks;
 		Block *mp_Pool; /* List's Head */
 		Block *mt_Sentinel; /* List's End*/
@@ -51,4 +51,11 @@ class SLLPool : public StoragePool {
 		
 }; 
 
+class BestSLLPool : public SLLPool {
+	public:
+	explicit BestSLLPool(std::size_t bytes) : SLLPool(bytes) {};
+	~BestSLLPool(){};
+	void * Allocate(std::size_t bytes);
+
+};
 #endif
