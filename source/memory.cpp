@@ -74,22 +74,28 @@ SLLPool::Allocate(std::size_t bytes){
 			_lhs->mp_Next = _rhs->mp_Next;
 
 			//Return the exatc location to user data
-			return static_cast<void*>(_rhs);
+			return static_cast<void*>(_rhs + sizeof(Header) );
 		}
 		if (_rhs->Lenght > BlocksNeed)
 		{
 			std::cout<<_rhs->Lenght<<"\n";
 			//Determine the Lenght of new empty block
 			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
+
+			//Quantidade de Blocos a serem alocados
+			_rhs->Lenght = BlocksNeed;
+
 			std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
 			//Determine Mp-next, next empt space
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
 
 			//Make conecton between previous and next Block
 			_lhs->mp_Next = (_rhs+BlocksNeed);
-
-			//Return the exatc location to user data 
-			return static_cast<void*>(_rhs) ;
+			
+			/*Return the exatc location to user data by converting _rhs to Header*
+				add +1 and converting to void *
+			  */ 
+			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
 
 	}
@@ -103,9 +109,12 @@ SLLPool::Allocate(std::size_t bytes){
 
 void
 SLLPool::Free(void * fre){
-	Block* now = static_cast<Block*>(fre) - sizeof(Header)  ;
+	//
+	Block* now = static_cast<Block*>(reinterpret_cast<Header*>(fre) - 1u);
 	//stub
-	
+	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
+
+	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
 	//now = nullptr;
 	return ;
 }
