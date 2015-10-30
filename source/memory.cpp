@@ -114,6 +114,33 @@ SLLPool::Free(void * fre){
 	//stub
 	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
 
+	
+	Block* prev;
+	Block* next;
+	prev = mt_Sentinel;
+	next = mt_Sentinel->mp_Next;
+	//runs the list untill fre is between prev and next or till next gets to the end of the list
+	while( next<now && next!=nullptr ){
+		prev = next;
+		next = next->mp_Next;
+	}
+	if((now+now->Lenght)==next){
+		now->Lenght = now->Lenght + next->Lenght;
+		now->mp_Next = next->mp_Next;
+	}
+	else{
+		now->mp_Next = next;
+	}
+	if((prev+prev->Lenght)==now){
+		prev->Lenght = now->Lenght + prev->Lenght;
+		prev->mp_Next = now->mp_Next;
+	}
+	else{
+		prev->mp_Next = now;
+	}
+	
+
+
 	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
 	//now = nullptr;
 	return ;
