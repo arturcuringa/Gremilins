@@ -48,6 +48,9 @@ int main (){
 	{
 		std::cout<<"vec["<<i<<"]: "<<i<<"\n";
 	}
+	int * k = new int;
+	delete k;
+	delete a;
 
 	return 0;
 }

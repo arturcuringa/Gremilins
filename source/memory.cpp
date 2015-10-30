@@ -73,8 +73,8 @@ SLLPool::Allocate(std::size_t bytes){
 			//Pasing exact size to user
 			_lhs->mp_Next = _rhs->mp_Next;
 
-			//Return the exatc location to user data AFTER the Header 
-			return static_cast<void*>(_rhs + sizeof(Header) );
+			//Return the exatc location to user data
+			return static_cast<void*>(_rhs);
 		}
 		if (_rhs->Lenght > BlocksNeed)
 		{
@@ -88,8 +88,8 @@ SLLPool::Allocate(std::size_t bytes){
 			//Make conecton between previous and next Block
 			_lhs->mp_Next = (_rhs+BlocksNeed);
 
-			//Return the exatc location to user data AFTER the Header 
-			return static_cast<void*>(_rhs + sizeof(Header) );
+			//Return the exatc location to user data 
+			return static_cast<void*>(_rhs) ;
 		}
 
 	}
@@ -103,17 +103,9 @@ SLLPool::Allocate(std::size_t bytes){
 
 void
 SLLPool::Free(void * fre){
-	fre = static_cast<Block*>(fre);
-	Block* _rhs;
-	Block* _lhs;
-
-	_rhs = this->mt_Sentinel;
-	_lhs = nullptr;
-
-	//while(_rhs != nullptr){
-
-
-	//}
-
-
+	Block* now = static_cast<Block*>(fre) - sizeof(Header)  ;
+	//stub
+	
+	//now = nullptr;
+	return ;
 }
