@@ -9,23 +9,26 @@ SLLPool::SLLPool(std::size_t bytes){
 	{
 		NumberOfBlocks++;
 	}
+
+	unsigned int FreeBlocks = NumberOfBlocks;
+	//Sentinel Block
+	NumberOfBlocks++;
+
 	std::cout<<"Number Of Blocks: "<<NumberOfBlocks<<"\n";
 	//Creats an array of blocks to be used as memory pool
 
 	this->mp_Pool = new Block[NumberOfBlocks];
 
 	std::cout<<"mp_Pool Adress: "<<mp_Pool<<"\n";
-	//Reduces one block of usage for sentinel Node
-	this->NumberOfBlocks--;
-
+	
 	//Dictates the number of nodes to the Head's list node
-	this->mp_Pool[0].Lenght = this->NumberOfBlocks;
+	this->mp_Pool[0].Lenght = FreeBlocks;
 
 	//Secure that next Node is null
 	this->mp_Pool[0].mp_Next = nullptr;
 
 	//use the last block to create Sentinel Node
-	this->mt_Sentinel = this->mp_Pool + NumberOfBlocks;
+	this->mt_Sentinel = this->mp_Pool + FreeBlocks ;
 
 	//Now Sentinel Nodes has to show List Head's
 	this->mt_Sentinel->mp_Next = this->mp_Pool;
@@ -50,21 +53,15 @@ SLLPool::Allocate(std::size_t bytes){
 	{
 		BlocksNeed++;
 	}
+	std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
 	//Block Pointer Right Had side -> Selected Block 
-	Block* _rhs = this->mt_Sentinel;
+	Block* _rhs = mt_Sentinel->mp_Next;
 
 	//Block Pointer Ledft Hand Side -> Previous selected Block
-	Block* _lhs  = nullptr;
+	Block* _lhs  = mt_Sentinel;
 	
 	//Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != nullptr){
-
-
-		//Points to previous Block
-		_lhs = _rhs;
-
-		//Points to Next empty block 
-		_rhs = _rhs->mp_Next;
 
 		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
 
@@ -77,13 +74,14 @@ SLLPool::Allocate(std::size_t bytes){
 			//Return the exatc location to user data
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
+
 		if (_rhs->Lenght > BlocksNeed)
 		{
 			std::cout<<_rhs->Lenght<<"\n";
 			//Determine the Lenght of new empty block
 			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
 
-			//Quantidade de Blocos a serem alocados
+			//How many blocks allocated
 			_rhs->Lenght = BlocksNeed;
 
 			std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
@@ -99,11 +97,22 @@ SLLPool::Allocate(std::size_t bytes){
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
 
+
+
+		//Points to previous Block
+		_lhs = _rhs;
+
+		//Points to Next empty block 
+		_rhs = _rhs->mp_Next;
+
+
+
 	}
 	//Throw Bad_alloc if MemoryPull can't fit the memory request
+	
 	if (_rhs == nullptr)
 		throw std::bad_alloc();
-	std::cout<<"bug";
+	
 	return nullptr;
 }
 
@@ -155,24 +164,22 @@ BestSLLPool::Allocate(std::size_t bytes){
 	{
 		BlocksNeed++;
 	}
+
+	std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
 	//Block Pointer Right Had side -> Selected Block 
-	Block* _rhs = this->mt_Sentinel;
+	Block* _rhs = mt_Sentinel->mp_Next;
 
 	//Block Pointer Ledft Hand Side -> Previous selected Block
-	Block* _lhs  = nullptr;
+	Block* _lhs  = mt_Sentinel;
 	
+	//Diference between Blocks need and avaliable space
 	unsigned int difLenght = NumberOfBlocks + 1;
+	//Pointer to possible block
 	Block* difPointer;
+	//Previous block of diPointer
 	Block* prevdifP;
 	//Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != nullptr){
-
-
-		//Points to previous Block
-		_lhs = _rhs;
-
-		//Points to Next empty block 
-		_rhs = _rhs->mp_Next;
 
 		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
 
@@ -193,6 +200,12 @@ BestSLLPool::Allocate(std::size_t bytes){
 				prevdifP = _lhs;
 			}
 		}
+
+		//Points to previous Block
+		_lhs = _rhs;
+
+		//Points to Next empty block 
+		_rhs = _rhs->mp_Next;
 
 	}
 	if (difPointer->Lenght > BlocksNeed)

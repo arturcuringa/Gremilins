@@ -59,5 +59,20 @@ int main (){
 
 	BestSLLPool z(400);
 
+	int* zaf = new(z) int[10];
+
+	int* zaf2 = new(z) int;
+
+	int* zaf3 = new(z) int;
+
+	int* zaf4 = new(z) int[10];
+
+	delete[] zaf;
+	delete zaf3;
+	std::cout<<"\n\n\n\n";
+	SLLPool n(20);
+
+	int* zap = new(n) int[5];
+	
 	return 0;
 }
