@@ -153,27 +153,39 @@ DLPool::Free(void * fre){
 	//stub
 	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
 	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
-
+	
 	Block* next;
-
 	next = mt_Sentinel->mp_Next;
 	//runs the list untill fre is between prev and next or till next gets to the end of the list
 	while( next<now && next!=nullptr ){
 		next = next->mp_Next;
 	}
+
 	if((now+now->Lenght)==next){
 		now->Lenght = now->Lenght + next->Lenght;
 		now->mp_Next = next->mp_Next;
+		if(next->mp_Next!=nullptr){
+
+			next->mp_Next->mp_Prev=now;
+
+		}
+		now->mp_Prev = next->mp_Prev;
 	}
 	else{
 		now->mp_Next = next;
+		now->mp_Prev = next->mp_Prev;
 	}
-	if((now->mp_Prev+now->mp_Prev->Lenght)==now){
-		now->mp_Prev->Lenght = now->Lenght + now->mp_Prev->Lenght;
-		now->mp_Prev->mp_Next = now->mp_Next;
+	if(( next->mp_Prev + next->mp_Prev->Lenght )==now){
+		
+		next->mp_Prev->Lenght = now->Lenght + next->mp_Prev->Lenght;
+
+		next->mp_Prev->mp_Next = now->mp_Next;
+		now->mp_Next->mp_Prev = next->mp_Prev;
 	}
 	else{
-		now->mp_Prev->mp_Next = now;
+		next->mp_Prev->mp_Next = now;
+		next->mp_Prev=now;
+
 	}
 	
 

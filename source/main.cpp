@@ -57,7 +57,7 @@ int main (){
 
 	delete[] j;
 
-	BestSLLPool z(400);
+	DLPool z(400);
 	z.PoolPrint();
 	int* zaf = new(z) int[10];
 	z.PoolPrint();
@@ -83,9 +83,9 @@ int main (){
 	
 	int* zaf3ret = new(z) int;
 	z.PoolPrint();
-
+	std::cout<<"\n\n\n\n";
 	DLPool u(400);
-
+	u.PoolPrint();
 	int* Hydeoshi = new(u) int[10];
 	u.PoolPrint();
 	int* Yuki = new(u) int;
@@ -96,8 +96,8 @@ int main (){
 	u.PoolPrint();
 
 	delete Yuki;
-
-	delete Yuji;
+	u.PoolPrint();
+	delete[] Yuji;
 
 	u.PoolPrint();
 
