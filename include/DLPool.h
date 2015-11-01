@@ -26,7 +26,7 @@ class DLPool : public StoragePool {
 		unsigned int NumberOfBlocks;
 		Block *mp_Pool; /* List's Head */
 		Block *mt_Sentinel; /* List's End*/
-
+		Block *mt_Tail;
 	public:
 		explicit DLPool(std::size_t bytes);
 		~DLPool();

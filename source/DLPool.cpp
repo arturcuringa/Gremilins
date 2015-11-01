@@ -1,40 +1,46 @@
 #include "DLPool.h"
 
-/* /brief Simle Linked List Memory Pool constructor*/
+/* \brief Simle Linked List Memory Pool constructor*/
 DLPool::DLPool(std::size_t bytes){
 	
-	//By the size passed in the constructor, calculates the number of bocks 	
+	// \brief By the size passed in the constructor, calculates the number of bocks 	
 	this->NumberOfBlocks = (bytes+ sizeof(Header))/sizeof(Block);
+	// \brief "Celeing " function
 	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
 	{
 		NumberOfBlocks++;
 	}
 
+	// \var Number of Free Blocks
 	unsigned int FreeBlocks = NumberOfBlocks;
-	//Sentinel Block
-	NumberOfBlocks++;
+	// \briefSentinel Block
+	NumberOfBlocks +=2;
 
 	std::cout<<"Number Of Blocks: "<<NumberOfBlocks<<"\n";
-	//Creats an array of blocks to be used as memory pool
-
+	// \var Creats an array of blocks to be used as memory pool
 	this->mp_Pool = new Block[NumberOfBlocks];
 
 	std::cout<<"mp_Pool Adress: "<<mp_Pool<<"\n";
 	
-	//Dictates the number of nodes to the Head's list node
+	// \brief Dictates the number of nodes to the Head's list node
 	this->mp_Pool[0].Lenght = FreeBlocks;
 
-	//Secure that next Node is null
-	this->mp_Pool[0].mp_Next = nullptr;
+	// \brief use the last block to create Sentinel Node
+	this->mt_Sentinel = this->mp_Pool + FreeBlocks -1 ;
 
+	this->mt_Tail = this->mp_Pool + FreeBlocks;
 
-	//use the last block to create Sentinel Node
-	this->mt_Sentinel = this->mp_Pool + FreeBlocks ;
-
-	//Now Sentinel Nodes has to show List Head's
+	// \brief Now Sentinel Nodes has to show List Head's
 	this->mt_Sentinel->mp_Next = this->mp_Pool;
-
+	// \brief Prev of mp_Poo = Sentinel
 	this->mp_Pool[0].mp_Prev = mt_Sentinel;
+
+	this->mt_Tail->mp_Prev = this->mp_Pool;
+	this->mt_Tail->mp_Next = nullptr;
+	
+		// \brief Secure that next Node is null
+	this->mp_Pool[0].mp_Next = mt_Tail;
+
 }
 
 DLPool::~DLPool(){
@@ -105,6 +111,8 @@ DLPool::Allocate(std::size_t bytes){
 			//Pasing exact size to user
 			_rhs->mp_Prev->mp_Next = _rhs->mp_Next;
 
+			_rhs->mp_Next->mp_Prev = _rhs->mp_Prev;
+
 			//Return the exatc location to user data
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
@@ -125,6 +133,8 @@ DLPool::Allocate(std::size_t bytes){
 			//Make conecton between previous and next Block
 			_rhs->mp_Prev->mp_Next = (_rhs+BlocksNeed);
 			
+			_rhs->mp_Next->mp_Prev = _rhs->mp_Prev;
+
 			/*Return the exatc location to user data by converting _rhs to Header*
 				add +1 and converting to void *
 			  */ 
