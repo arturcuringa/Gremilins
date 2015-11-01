@@ -43,6 +43,42 @@ SLLPool::~SLLPool(){
 
 }
 
+void
+SLLPool::PoolPrint(){
+	Block *freecheck;
+	Block *allcheck;
+	allcheck=mp_Pool;
+	freecheck=mt_Sentinel->mp_Next;
+	unsigned int c=0;
+	std::cout<<"\n";
+	while(allcheck<mt_Sentinel){
+		if(allcheck ==freecheck){
+			std::cout<<" |"<<allcheck->Lenght;
+			while(allcheck->Lenght>c){
+				c++;
+				std::cout<<" -";
+			}
+			c=0;
+			std::cout<<"|";
+			allcheck=(allcheck+allcheck->Lenght);
+			freecheck=freecheck->mp_Next;
+		}
+		else{
+			std::cout<<" |"<<allcheck->Lenght;
+			while(allcheck->Lenght>c){
+				c++;
+				std::cout<<" +";
+			}
+			c=0;
+			std::cout<<"|";
+			allcheck=(allcheck+allcheck->Lenght);
+		}
+
+	}
+	std::cout<<" |BLOCO SENTINEL:1 -|\n\n";
+
+}
+
 /* \brief Allocates memory to user, method inside new(Pool) overloaded method*/
 void*
 SLLPool::Allocate(std::size_t bytes){

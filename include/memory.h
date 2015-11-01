@@ -48,6 +48,7 @@ class SLLPool : public StoragePool {
 		~SLLPool();
 		void * Allocate(std::size_t bytes);
 		void  Free(void * fre);
+		void PoolPrint();
 		
 }; 
 

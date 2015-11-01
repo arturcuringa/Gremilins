@@ -58,26 +58,30 @@ int main (){
 	delete[] j;
 
 	BestSLLPool z(400);
-
+	z.PoolPrint();
 	int* zaf = new(z) int[10];
-
+	z.PoolPrint();
 	int* zaf2 = new(z) int;
-
+	z.PoolPrint();
 	int* zaf3 = new(z) int;
-
+	z.PoolPrint();
 	int* zaf4 = new(z) int[10];
-
+	z.PoolPrint();
 	delete[] zaf;
+	z.PoolPrint();
 	delete zaf3;
-
+	z.PoolPrint();
 	std::cout<<"\n\n\n\n";
 	SLLPool n(20);
 
 
 	int* zap = new(n) int[5];
+	n.PoolPrint();
+	delete[] zap;
+	n.PoolPrint();
 	std::cout<<"\n\n\n\n";
 	
 	int* zaf3ret = new(z) int;
-
+	z.PoolPrint();
 	return 0;
 }
