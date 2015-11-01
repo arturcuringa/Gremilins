@@ -49,8 +49,17 @@ int main (){
 		std::cout<<"vec["<<i<<"]: "<<i<<"\n";
 	}
 	int * k = new int;
+	p.PoolPrint();
 	delete k;
 	delete a;
+	p.PoolPrint();
 	delete b;
+	p.PoolPrint();
+	delete e;
+	p.PoolPrint();
+	delete d;
+	p.PoolPrint();
+	delete c;
+	p.PoolPrint();
 	return 0;
 }
