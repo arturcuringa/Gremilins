@@ -1,7 +1,7 @@
 #include <iostream>
 #include "memory.h"
 #include "Operators.h"
-
+#include "DLPool.h"
 
 
 int main (){
@@ -83,5 +83,25 @@ int main (){
 	
 	int* zaf3ret = new(z) int;
 	z.PoolPrint();
+
+	DLPool u(400);
+
+	int* Hydeoshi = new(u) int[10];
+	u.PoolPrint();
+	int* Yuki = new(u) int;
+	u.PoolPrint();
+	int* Yuji = new(u) int[11];
+	u.PoolPrint();
+	int* Himeji = new(u) int;
+	u.PoolPrint();
+
+	delete Yuki;
+
+	delete Yuji;
+
+	u.PoolPrint();
+
+
+
 	return 0;
 }

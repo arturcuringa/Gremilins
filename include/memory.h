@@ -31,7 +31,7 @@ class SLLPool : public StoragePool {
 			enum { BlockSize = 16};
 			union {
 				Block *mp_Next;
-				char mc_RawArea [16 - sizeof(Header) - sizeof(mp_Next)];
+				char mc_RawArea [BlockSize - sizeof(Header) - sizeof(mp_Next)];
 			};
 			Block () : Header(), mp_Next(nullptr){};
 
