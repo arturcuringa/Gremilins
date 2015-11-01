@@ -69,10 +69,15 @@ int main (){
 
 	delete[] zaf;
 	delete zaf3;
+
 	std::cout<<"\n\n\n\n";
 	SLLPool n(20);
 
+
 	int* zap = new(n) int[5];
+	std::cout<<"\n\n\n\n";
 	
+	int* zaf3ret = new(z) int;
+
 	return 0;
 }
