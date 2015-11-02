@@ -5,10 +5,12 @@
 
 
 int main (){
-	DLPool z(400);
+	
+	DLPool z(20);
 
-int *k = new(z) int;
+	int* k = new(z) int;
 
+	z.PoolPrint();
 
 	return 0;
 }

@@ -15,10 +15,11 @@ class DLPool : public StoragePool {
 		};
 		struct Block: public Header{
 
-			enum { BlockSize = 16};
+			enum { BlockSize = 24};
+			Block *mp_Prev;
 			union {
-				Block *mp_Prev;
 				Block *mp_Next;
+				char mc_RawArea [BlockSize - sizeof(Header) - sizeof(mp_Next)- sizeof(mp_Prev)];
 			};
 			Block () : Header(), mp_Next(nullptr){};
 		};

@@ -20,27 +20,31 @@ DLPool::DLPool(std::size_t bytes){
 	// \var Creats an array of blocks to be used as memory pool
 	this->mp_Pool = new Block[NumberOfBlocks];
 
-	std::cout<<"mp_Pool Adress: "<<mp_Pool<<"\n";
+	std::cout<<"mp_Pool Adress: "<<mp_Pool+1<<"\n";
 	
 	// \brief Dictates the number of nodes to the Head's list node
-	this->mp_Pool[0].Lenght = FreeBlocks;
+	this->mp_Pool[1].Lenght = FreeBlocks;
 
 	// \brief use the last block to create Sentinel Node
-	this->mt_Sentinel = this->mp_Pool + FreeBlocks -1 ;
+	this->mt_Sentinel = this->mp_Pool;
 
-	this->mt_Tail = this->mp_Pool + FreeBlocks;
+	this->mt_Tail = this->mp_Pool + FreeBlocks +1 ;
 
 	// \brief Now Sentinel Nodes has to show List Head's
-	this->mt_Sentinel->mp_Next = this->mp_Pool;
+	this->mt_Sentinel->mp_Next = this->mp_Pool + 1;
 	// \brief Prev of mp_Poo = Sentinel
-	this->mp_Pool[0].mp_Prev = mt_Sentinel;
-
-	this->mt_Tail->mp_Prev = this->mp_Pool;
+		mp_Pool[1].mp_Next = mt_Tail;
+	this->mt_Tail->mp_Prev = this->mp_Pool+1;
 	this->mt_Tail->mp_Next = nullptr;
-	
-		// \brief Secure that next Node is null
-	this->mp_Pool[0].mp_Next = mt_Tail;
 
+
+	this->mp_Pool[1].mp_Prev = mt_Sentinel;
+		// \brief Secure that next Node is null
+
+	std::cout<<"mpPool_Prev: " << (mp_Pool + 1)-> mp_Prev << "\n";
+	std::cout <<"mt_Sentinel : "<< mt_Sentinel;
+	std::cout << "mp_Pool Next" << (mp_Pool + 1)->mp_Next << "\n";
+	std::cout << "mt_Tail: " << mt_Tail << "\n";
 }
 
 DLPool::~DLPool(){
@@ -54,11 +58,11 @@ void
 DLPool::PoolPrint(){
 	Block *freecheck;
 	Block *allcheck;
-	allcheck=mp_Pool;
+	allcheck=mp_Pool + 1;
 	freecheck=mt_Sentinel->mp_Next;
 	unsigned int c=0;
 	std::cout<<"\n";
-	while(allcheck<mt_Sentinel){
+	while(allcheck<mt_Tail){
 		if(allcheck ==freecheck){
 			std::cout<<" |"<<allcheck->Lenght;
 			while(allcheck->Lenght>c){
@@ -101,7 +105,7 @@ DLPool::Allocate(std::size_t bytes){
 	Block* _rhs = mt_Sentinel->mp_Next;
 	
 	//Loop until find empty block with enought space to fit user's stuff
-	while(_rhs != nullptr){
+	while(_rhs != mt_Tail){
 
 		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
 
@@ -130,11 +134,13 @@ DLPool::Allocate(std::size_t bytes){
 			//Determine Mp-next, next empt space
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
 
-			//Make conecton between previous and next Block
-			_rhs->mp_Prev->mp_Next = (_rhs+BlocksNeed);
-			
-			_rhs->mp_Next->mp_Prev = _rhs->mp_Prev;
+			(_rhs+BlocksNeed)->mp_Prev = _rhs->mp_Prev;
 
+			//Make conecton between previous and next Block
+			(_rhs->mp_Prev)->mp_Next = (_rhs+BlocksNeed);
+			
+			(_rhs->mp_Next)->mp_Prev = (_rhs+BlocksNeed);
+			std::cout<<"AUQIUAIAIUA   "<<(_rhs->mp_Prev) << " "<< "\n"<<mt_Sentinel;
 			/*Return the exatc location to user data by converting _rhs to Header*
 				add +1 and converting to void *
 			  */ 
@@ -167,34 +173,31 @@ DLPool::Free(void * fre){
 	Block* next;
 	next = mt_Sentinel->mp_Next;
 	//runs the list untill fre is between prev and next or till next gets to the end of the list
-	while( next<now && next!=nullptr ){
+	while( next<now && next!=mt_Tail ){
 		next = next->mp_Next;
 	}
 
 	if((now+now->Lenght)==next){
 		now->Lenght = now->Lenght + next->Lenght;
+
 		now->mp_Next = next->mp_Next;
-		if(next->mp_Next!=nullptr){
 
-			next->mp_Next->mp_Prev=now;
+		now->mp_Prev = next->mp_Prev;
 
-		}
-		now->mp_Prev = next->mp_Prev;
-	}
-	else{
-		now->mp_Next = next;
-		now->mp_Prev = next->mp_Prev;
+		now->mp_Prev->mp_Next = now;
+
 	}
 	if(( next->mp_Prev + next->mp_Prev->Lenght )==now){
 		
 		next->mp_Prev->Lenght = now->Lenght + next->mp_Prev->Lenght;
 
-		next->mp_Prev->mp_Next = now->mp_Next;
-		now->mp_Next->mp_Prev = next->mp_Prev;
 	}
 	else{
-		next->mp_Prev->mp_Next = now;
-		next->mp_Prev=now;
+		now->mp_Next = next;
+		now->mp_Prev = next->mp_Prev;
+
+		now->mp_Prev->mp_Next = now;
+		next->mp_Prev = now;
 
 	}
 	
