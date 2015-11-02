@@ -83,51 +83,51 @@ SLLPool::PoolPrint(){
 void*
 SLLPool::Allocate(std::size_t bytes){
 
-	//Calculats the numbers of blocks needed
+	// \brief Calculats the numbers of blocks needed
 	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
 	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
 	{
 		BlocksNeed++;
 	}
 	std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
-	//Block Pointer Right Had side -> Selected Block 
+	// \brief Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = mt_Sentinel->mp_Next;
 
-	//Block Pointer Ledft Hand Side -> Previous selected Block
+	// \brief Block Pointer Ledft Hand Side -> Previous selected Block
 	Block* _lhs  = mt_Sentinel;
 	
-	//Loop until find empty block with enought space to fit user's stuff
+	// \brief Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != nullptr){
 
 		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
-
+		// \brief If there's a block with exact size of request
 		if (_rhs->Lenght == BlocksNeed )
 		{
 
-			//Pasing exact size to user
+			// \brief Pasing exact size to user
 			_lhs->mp_Next = _rhs->mp_Next;
 
-			//Return the exatc location to user data
+			// \brief Return the exatc location to user data
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
 
 		if (_rhs->Lenght > BlocksNeed)
 		{
 			std::cout<<_rhs->Lenght<<"\n";
-			//Determine the Lenght of new empty block
+			// \brief Determine the Lenght of new empty block
 			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
 
-			//How many blocks allocated
+			// \brief How many blocks allocated
 			_rhs->Lenght = BlocksNeed;
 
 			std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
-			//Determine Mp-next, next empt space
+			// \brief Determine Mp-next, next empt space
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
 
-			//Make conecton between previous and next Block
+			// \brief Make conecton between previous and next Block
 			_lhs->mp_Next = (_rhs+BlocksNeed);
 			
-			/*Return the exatc location to user data by converting _rhs to Header*
+			/* \brief Return the exatc location to user data by converting _rhs to Header*
 				add +1 and converting to void *
 			  */ 
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
@@ -135,17 +135,16 @@ SLLPool::Allocate(std::size_t bytes){
 
 
 
-		//Points to previous Block
+		// \brief Points to previous Block
 		_lhs = _rhs;
 
-		//Points to Next empty block 
+		// \brief Points to Next empty block 
 		_rhs = _rhs->mp_Next;
 
 
 
 	}
-	//Throw Bad_alloc if MemoryPull can't fit the memory request
-	
+	// \brief Throw Bad_alloc if MemoryPull can't fit the memory request
 	if (_rhs == nullptr)
 		throw std::bad_alloc();
 	

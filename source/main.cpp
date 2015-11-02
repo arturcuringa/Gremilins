@@ -6,7 +6,7 @@
 
 int main (){
 	
-	SLLPool p(400);
+	DLPool p(400);
 	SLLPool q(800);
 	int* a, *b, *c ,*d, *e, *f , *g;
 
@@ -50,12 +50,38 @@ int main (){
 	}
 	int * k = new int;
 	delete k;
+	p.PoolPrint();
 	delete a;
+	p.PoolPrint();
 	delete b;
+	p.PoolPrint();
+	delete e;
+	p.PoolPrint();
+	delete d;
+	p.PoolPrint();
+	delete c;
+	p.PoolPrint();
 
+	a = new(p) int;
+	p.PoolPrint();
+	b = new(p) int;
+	p.PoolPrint();
+	c = new(p) int;
+	p.PoolPrint();
+	d = new(p) int;
+	e = new(p) int;
+	p.PoolPrint();
+	delete f;
+	p.PoolPrint();
+	delete g;
+	p.PoolPrint();
+
+
+std::cout<<"AQUI!!!!!!!!!!!!!!!!!!!!!!";
 	int *j = new(p) int[5];
 
 	delete[] j;
+	p.PoolPrint();
 	std::cout<<"\n\n\n\n\n";
 	DLPool z(400);
 	z.PoolPrint();

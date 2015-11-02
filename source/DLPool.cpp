@@ -118,6 +118,7 @@ DLPool::Allocate(std::size_t bytes){
 			// \brief Pasing exact size to user
 			_rhs->mp_Prev->mp_Next = _rhs->mp_Next;
 
+
 			_rhs->mp_Next->mp_Prev = _rhs->mp_Prev;
 
 			// \brief Return the exatc location to user data
@@ -151,7 +152,7 @@ DLPool::Allocate(std::size_t bytes){
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
 
-		//Points to Next empty block 
+		// \brief Points to Next empty block 
 		_rhs = _rhs->mp_Next;
 
 
@@ -181,22 +182,35 @@ DLPool::Free(void * fre){
 		next = next->mp_Next;
 	}
 
-	if((now+now->Lenght)==next){
-		now->Lenght = now->Lenght + next->Lenght;
+	if((now+now->Lenght)==next || ( next->mp_Prev + next->mp_Prev->Lenght )==now ){
+		bool flag = false;
+		if((now+now->Lenght)==next){
+			now->Lenght = now->Lenght + next->Lenght;
 
-		now->mp_Next = next->mp_Next;
-
-		now->mp_Prev = next->mp_Prev;
-
-		now->mp_Prev->mp_Next = now;
-
-	}
-	if(( next->mp_Prev + next->mp_Prev->Lenght )==now){
+			now->mp_Next = next->mp_Next;
+			//std::cout<<now->mp_Next<<" >>>" << next->mp_Next;
+			now->mp_Prev = next->mp_Prev;
+			//std::cout<<now->mp_Prev<<" >>>" << next->mp_Prev;
+			next->mp_Prev->mp_Next = now;
+			std::cout<<next->mp_Prev->mp_Next;
+			next->mp_Next->mp_Prev = now;
+			flag = true;
+		}
+		if(( next->mp_Prev + next->mp_Prev->Lenght )==now){
 		
-		next->mp_Prev->Lenght = now->Lenght + next->mp_Prev->Lenght;
+			next->mp_Prev->Lenght = now->Lenght + next->mp_Prev->Lenght;
+			// \brief In case of both joining
+			if (flag)
+			{
+				next->mp_Prev->mp_Next = now->mp_Next;
+				now->mp_Next->mp_Prev = next->mp_Prev;
 
+			}
+			
+		}
 	}
 	else{
+		std::cout<<"FLAG!";
 		now->mp_Next = next;
 		now->mp_Prev = next->mp_Prev;
 
