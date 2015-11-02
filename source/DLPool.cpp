@@ -25,21 +25,23 @@ DLPool::DLPool(std::size_t bytes){
 	// \brief Dictates the number of nodes to the Head's list node
 	this->mp_Pool[1].Lenght = FreeBlocks;
 
-	// \brief use the last block to create Sentinel Node
+	// \brief use the first block to create Sentinel Node
 	this->mt_Sentinel = this->mp_Pool;
-
+	// \brief Use the last block to create Tail Node
 	this->mt_Tail = this->mp_Pool + FreeBlocks +1 ;
 
 	// \brief Now Sentinel Nodes has to show List Head's
 	this->mt_Sentinel->mp_Next = this->mp_Pool + 1;
-	// \brief Prev of mp_Poo = Sentinel
+	// \brief Next of mpPool to Tail
 		mp_Pool[1].mp_Next = mt_Tail;
+	// \brief Set Tails Prev ro Mp-Pool
 	this->mt_Tail->mp_Prev = this->mp_Pool+1;
+	
+	// \brief Set Tail's Next to null
 	this->mt_Tail->mp_Next = nullptr;
 
-
+	// \brief Prev of mp_Poo = Sentinel
 	this->mp_Pool[1].mp_Prev = mt_Sentinel;
-		// \brief Secure that next Node is null
 
 	std::cout<<"mpPool_Prev: " << (mp_Pool + 1)-> mp_Prev << "\n";
 	std::cout <<"mt_Sentinel : "<< mt_Sentinel;
@@ -94,54 +96,56 @@ DLPool::PoolPrint(){
 void*
 DLPool::Allocate(std::size_t bytes){
 
-	//Calculats the numbers of blocks needed
+	// \brief Calculats the numbers of blocks needed
 	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
+	// \brief "Celeing " function
 	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
 	{
 		BlocksNeed++;
 	}
 	std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
-	//Block Pointer Right Had side -> Selected Block 
+	// \brief Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = mt_Sentinel->mp_Next;
 	
-	//Loop until find empty block with enought space to fit user's stuff
+	// \brief Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != mt_Tail){
 
 		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
-
+		// \brief If there's a block with exact size of request
 		if (_rhs->Lenght == BlocksNeed )
 		{
 
-			//Pasing exact size to user
+			// \brief Pasing exact size to user
 			_rhs->mp_Prev->mp_Next = _rhs->mp_Next;
 
 			_rhs->mp_Next->mp_Prev = _rhs->mp_Prev;
 
-			//Return the exatc location to user data
+			// \brief Return the exatc location to user data
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
-
+		// \brief If there's a block with bigger than request
 		if (_rhs->Lenght > BlocksNeed)
 		{
 			std::cout<<_rhs->Lenght<<"\n";
-			//Determine the Lenght of new empty block
+			// \brief Determine the Lenght of new empty block
 			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
 
-			//How many blocks allocated
+			// \brief How many blocks allocated
 			_rhs->Lenght = BlocksNeed;
 
 			std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
-			//Determine Mp-next, next empt space
+			// \brief Determine Mp-next, next empt space
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
-
+			// \brief Sets Next Free block prev to _rhs prev
 			(_rhs+BlocksNeed)->mp_Prev = _rhs->mp_Prev;
 
-			//Make conecton between previous and next Block
+			// \brief Make conecton between previous and next Block
 			(_rhs->mp_Prev)->mp_Next = (_rhs+BlocksNeed);
-			
+
+			// \brief Make conection between next block and request block
 			(_rhs->mp_Next)->mp_Prev = (_rhs+BlocksNeed);
 			std::cout<<"AUQIUAIAIUA   "<<(_rhs->mp_Prev) << " "<< "\n"<<mt_Sentinel;
-			/*Return the exatc location to user data by converting _rhs to Header*
+			/* \Brief Return the exatc location to user data by converting _rhs to Header*
 				add +1 and converting to void *
 			  */ 
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
@@ -153,7 +157,7 @@ DLPool::Allocate(std::size_t bytes){
 
 
 	}
-	//Throw Bad_alloc if MemoryPull can't fit the memory request
+	// \brief Throw Bad_alloc if MemoryPull can't fit the memory request
 	
 	if (_rhs == nullptr)
 		throw std::bad_alloc();
@@ -164,9 +168,9 @@ DLPool::Allocate(std::size_t bytes){
 
 void
 DLPool::Free(void * fre){
-	//
+	// \brief Convert void Poiner to Block Pointer after reduces 1u of Head
 	Block* now = static_cast<Block*>(reinterpret_cast<Header*>(fre) - 1u);
-	//stub
+	
 	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
 	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
 	

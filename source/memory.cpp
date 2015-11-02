@@ -3,7 +3,7 @@
 /* /brief Simle Linked List Memory Pool constructor*/
 SLLPool::SLLPool(std::size_t bytes){
 	
-	//By the size passed in the constructor, calculates the number of bocks 	
+	// \brief By the size passed in the constructor, calculates the number of bocks 	
 	this->NumberOfBlocks = (bytes+ sizeof(Header))/sizeof(Block);
 	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
 	{
@@ -11,26 +11,26 @@ SLLPool::SLLPool(std::size_t bytes){
 	}
 
 	unsigned int FreeBlocks = NumberOfBlocks;
-	//Sentinel Block
+	// \brief Sentinel Block
 	NumberOfBlocks++;
 
 	std::cout<<"Number Of Blocks: "<<NumberOfBlocks<<"\n";
-	//Creats an array of blocks to be used as memory pool
 
+	// \brief Creats an array of blocks to be used as memory pool
 	this->mp_Pool = new Block[NumberOfBlocks];
 
 	std::cout<<"mp_Pool Adress: "<<mp_Pool<<"\n";
 	
-	//Dictates the number of nodes to the Head's list node
+	// \briefDictates the number of nodes to the Head's list node
 	this->mp_Pool[0].Lenght = FreeBlocks;
 
-	//Secure that next Node is null
+	// \brief Secure that next Node is null
 	this->mp_Pool[0].mp_Next = nullptr;
 
-	//use the last block to create Sentinel Node
+	// \brief use the last block to create Sentinel Node
 	this->mt_Sentinel = this->mp_Pool + FreeBlocks ;
 
-	//Now Sentinel Nodes has to show List Head's
+	// \brief Now Sentinel Nodes has to show List Head's
 	this->mt_Sentinel->mp_Next = this->mp_Pool;
 
 
