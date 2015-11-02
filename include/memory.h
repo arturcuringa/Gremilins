@@ -1,6 +1,7 @@
 #ifndef _MEMORYPULL_
 #define _MEMORYPULL_
 
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <cstdlib>
 #include <new>
@@ -49,6 +50,8 @@ class SLLPool : public StoragePool {
 		void * Allocate(std::size_t bytes);
 		void  Free(void * fre);
 		void PoolPrint();
+		void Barprint(sf::RenderWindow &janela);
+
 		
 }; 
 

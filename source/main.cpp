@@ -5,8 +5,8 @@
 
 
 int main (){
-	
-	SLLPool p(400);
+	//sf::RenderWindow janela(sf::VideoMode(  , ),"Memory management");
+	DLPool p(400);
 	SLLPool q(800);
 	int* a, *b, *c ,*d, *e, *f , *g;
 
@@ -49,9 +49,30 @@ int main (){
 		std::cout<<"vec["<<i<<"]: "<<i<<"\n";
 	}
 	int * k = new int;
-	delete k;
+	delete f;
+	p.PoolPrint();
 	delete a;
+	p.PoolPrint();
 	delete b;
+	p.PoolPrint();
+	delete d;
+	p.PoolPrint();
+	delete e;
+	p.PoolPrint();
+	delete c;
+	p.PoolPrint();
+
+	a = new(p) int;
+	b = new(p) int;
+	c = new(p) int;
+	d = new(p) int;
+	e = new(p) int;
+	p.PoolPrint();
+	//delete f;
+	//p.PoolPrint();
+	delete g;
+	p.PoolPrint();
+
 
 	int *j = new(p) int[5];
 

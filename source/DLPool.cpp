@@ -64,6 +64,7 @@ DLPool::PoolPrint(){
 	freecheck=mt_Sentinel->mp_Next;
 	unsigned int c=0;
 	std::cout<<"\n";
+	std::cout<<" |BLOCO SENTINEL:1 -|";
 	while(allcheck<mt_Tail){
 		if(allcheck ==freecheck){
 			std::cout<<" |"<<allcheck->Lenght;
@@ -88,7 +89,7 @@ DLPool::PoolPrint(){
 		}
 
 	}
-	std::cout<<" |BLOCO SENTINEL:1 -|\n\n";
+		std::cout<<" |BLOCO TAIL:1 -|\n";
 
 }
 
@@ -173,7 +174,6 @@ DLPool::Free(void * fre){
 	
 	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
 	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
-	
 	Block* next;
 	next = mt_Sentinel->mp_Next;
 	//runs the list untill fre is between prev and next or till next gets to the end of the list
@@ -181,33 +181,26 @@ DLPool::Free(void * fre){
 		next = next->mp_Next;
 	}
 
-	if((now+now->Lenght)==next){
-		now->Lenght = now->Lenght + next->Lenght;
-
-		now->mp_Next = next->mp_Next;
-
-		now->mp_Prev = next->mp_Prev;
-
-		now->mp_Prev->mp_Next = now;
-
-	}
 	if(( next->mp_Prev + next->mp_Prev->Lenght )==now){
 		
 		next->mp_Prev->Lenght = now->Lenght + next->mp_Prev->Lenght;
+		now = next->mp_Prev;
+		
+	}
+	else{
+		next->mp_Prev->mp_Next = now;
+		now->mp_Prev=next->mp_Prev;
+	}
+	if((now+now->Lenght)==next && next!=mt_Tail){
+		now->Lenght = now->Lenght + next->Lenght;
+		now->mp_Next = next->mp_Next;
+		next->mp_Next->mp_Prev=now;
 
 	}
 	else{
-		now->mp_Next = next;
-		now->mp_Prev = next->mp_Prev;
-
-		now->mp_Prev->mp_Next = now;
-		next->mp_Prev = now;
-
+		now->mp_Next=next;
+		next->mp_Prev=now;
 	}
-	
 
-
-	
-	//now = nullptr;
 	return ;
 }
