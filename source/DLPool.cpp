@@ -181,7 +181,7 @@ DLPool::Free(void * fre){
 		next = next->mp_Next;
 	}
 
-	if(( next->mp_Prev + next->mp_Prev->Lenght )==now){
+	if(( next->mp_Prev + next->mp_Prev->Lenght)==now && next->mp_Prev!=mt_Sentinel){
 		
 		next->mp_Prev->Lenght = now->Lenght + next->mp_Prev->Lenght;
 		now = next->mp_Prev;

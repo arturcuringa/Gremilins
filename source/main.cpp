@@ -68,8 +68,6 @@ int main (){
 	d = new(p) int;
 	e = new(p) int;
 	p.PoolPrint();
-	//delete f;
-	//p.PoolPrint();
 	delete g;
 	p.PoolPrint();
 
