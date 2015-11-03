@@ -12,7 +12,7 @@ DIRIN = include/
 
 DIRSRC = source/
 
-DRIVE = main.cpp
+DRIVE =  drive_3block.cpp # drive_2block.cpp drive_oneblock.cpp  #main.cpp 
 #######################################################TEST########################################################
 
 

@@ -49,7 +49,7 @@ SLLPool::Barprint(sf::RenderWindow &janela){
 	Block *allcheck;
 	allcheck=mp_Pool;
 	freecheck=mt_Sentinel->mp_Next;
-	unsigned int c=0,c2=0;
+	unsigned int c=0;
 	std::cout<<"\n";
 	while(allcheck<mt_Sentinel){
 		if(allcheck ==freecheck){
