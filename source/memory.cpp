@@ -44,40 +44,88 @@ SLLPool::~SLLPool(){
 }
 void 
 SLLPool::Barprint(sf::RenderWindow &janela){
-	sf::RectangleShape rectangle[NumberOfBlocks];
+	sf::RectangleShape rect;
+	janela.clear(sf::Color(0,0,0));
 	Block *freecheck;
 	Block *allcheck;
 	allcheck=mp_Pool;
 	freecheck=mt_Sentinel->mp_Next;
-	unsigned int c=0,c2=0;
-	std::cout<<"\n";
+	unsigned int c=0,c2=0,c3=0;
 	while(allcheck<mt_Sentinel){
 		if(allcheck ==freecheck){
-			std::cout<<" |"<<allcheck->Lenght;
+
+			c=0;
 			while(allcheck->Lenght>c){
 				c++;
-				std::cout<<" -";
 			}
-			c=0;
-			std::cout<<"|";
-			allcheck=(allcheck+allcheck->Lenght);
-			freecheck=freecheck->mp_Next;
+			if(c2+c>63){
+				rect.setPosition(5+c2*20,5+c3*25);
+				c2=c2+c;
+				c=63-(c2-c);
+				c2=c2-63;
+				rect.setSize(sf::Vector2f(20*c, 20));
+				rect.setFillColor(sf::Color(0,255,0));
+				rect.setOutlineColor(sf::Color(255,255,255));
+				rect.setOutlineThickness(1);
+				janela.draw( rect);
+
+				c3++;
+
+				rect.setSize(sf::Vector2f(20*c2, 20));
+				rect.setPosition(5+0*20,5+c3*25);
+				janela.draw( rect);
+				allcheck=(allcheck+allcheck->Lenght);
+				freecheck=freecheck->mp_Next;
+			}
+			else{
+				rect.setSize(sf::Vector2f(20*c, 20));
+				rect.setFillColor(sf::Color(0,255,0));
+				rect.setOutlineColor(sf::Color(0,0,0));
+				rect.setOutlineThickness(1);
+				rect.setPosition(5+c2*20,5+c3*25);
+				janela.draw( rect);
+				allcheck=(allcheck+allcheck->Lenght);
+				freecheck=freecheck->mp_Next;
+				c2=c2+c;
+			}
 		}
 		else{
-			std::cout<<" |"<<allcheck->Lenght;
+			c=0;
 			while(allcheck->Lenght>c){
 				c++;
-				std::cout<<" +";
 			}
-			c=0;
-			std::cout<<"|";
+			if(c2+c>63){
+				rect.setPosition(5+c2*20,5+c3*25);
+				c2=c2+c;
+				c=63-(c2-c);
+				c2=c2-63;
+				rect.setSize(sf::Vector2f(20*c, 20));
+				rect.setFillColor(sf::Color(255,0,0));
+				rect.setOutlineColor(sf::Color(255,255,255));
+				rect.setOutlineThickness(1);
+				janela.draw( rect);
+
+				c3++;
+
+				rect.setSize(sf::Vector2f(20*c2, 20));
+				rect.setPosition(5+0*20,5+c3*25);
+				janela.draw( rect);
+				allcheck=(allcheck+allcheck->Lenght);
+			}
+			rect.setSize(sf::Vector2f(20*c, 20));
+			rect.setFillColor(sf::Color(255,0,0));
+			rect.setOutlineColor(sf::Color(0,0,0));
+			rect.setOutlineThickness(1);
+			rect.setPosition(5+c2*20,5+c3*25);
+			janela.draw( rect);
 			allcheck=(allcheck+allcheck->Lenght);
+			c2=c2+c;
 		}
 
+
 	}
-	std::cout<<" |BLOCO SENTINEL:1 -|\n\n";
 
-
+	janela.display();
 }
 
 void
