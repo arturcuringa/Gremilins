@@ -112,39 +112,52 @@ int main (){
 
 	StoragePool* p;
 	std::size_t  memSize = 2000000000;
-	for (size_t i = 10; i < 10000000; i = i * 10)
+	auto start = std::chrono::steady_clock::now();
+	auto end = std::chrono::steady_clock::now();
+	auto dif = end - start;
+	for (size_t i = 10; i < 1000000; i = i * 10)
 	{
 		std::cout<<">>>Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
 		std::cout<<">>>Creating a SLLPool with " << memSize << "bytes\n";
-
-		p = new SLLPool (memSize);
-		auto start = std::chrono::steady_clock::now();
-		StoragePoolTest(*p, i);
-		auto end = std::chrono::steady_clock::now();
-		auto dif = end - start;
-		std::cout<<">>>SLLPool used :";
-		std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
-		std::cout<<" >>>Deleting SLLPool \n\n";
-		delete p;
+		for (int j = 0; j < 10; ++j)
+		{
+			p = new SLLPool (memSize);
+			start = std::chrono::steady_clock::now();
+			StoragePoolTest(*p, i);
+			end = std::chrono::steady_clock::now();
+			dif = end - start;
+			std::cout<<">>>SLLPool used :";
+			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
+			std::cout<<" >>>Deleting SLLPool \n\n";
+			delete p;
+		}
+		
 
 
 		std::cout<<">>>Starting Time Test of BestSLLPool with " << i <<"interactions:" <<"\n";
 		std::cout<<">>>Creating a BestSLLPool with " << memSize << "bytes\n";
+		for (int j = 0; j < 10; ++j)
+		{
+			p = new BestSLLPool (memSize);
 
-		p = new BestSLLPool (memSize);
+			start = std::chrono::steady_clock::now();
+			StoragePoolTest(*p, i);
+			end = std::chrono::steady_clock::now();
+			dif = end - start;
+			std::cout<<">>>BestSLLPool used :";
+			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
+			std::cout<<" >>>Deleting SLLPool \n\n";
 
-		start = std::chrono::steady_clock::now();
-		StoragePoolTest(*p, i);
-		end = std::chrono::steady_clock::now();
-		dif = end - start;
-		std::cout<<">>>BestSLLPool used :";
-		std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
-		std::cout<<" >>>Deleting SLLPool \n\n";
-
-		delete p;
+			delete p;
+		}
+		
 
 		std::cout<<">>>Starting Time Test of STL Heap Alloc with " << i <<"interactions:" <<"\n";
-		start = std::chrono::steady_clock::now();
+		
+		for (int j = 0; j < 10; ++j)
+		{
+			start = std::chrono::steady_clock::now();
+
 
 		NewAlloc(i);
 
@@ -154,6 +167,9 @@ int main (){
 		std::cout<<">>>STL Heap Alloc used :";
 		std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
 		std::cout<<"\n";
+		}
+
+		
 
 	}
 
