@@ -44,87 +44,101 @@ SLLPool::~SLLPool(){
 }
 void 
 SLLPool::Barprint(sf::RenderWindow &janela){
+	//declares the rectangle rect
 	sf::RectangleShape rect;
+	//clear the window
 	janela.clear(sf::Color(0,0,0));
+	//declares 2 vectors to run the memory pool
 	Block *freecheck;
 	Block *allcheck;
+	//define the vectors initial value
 	allcheck=mp_Pool;
 	freecheck=mt_Sentinel->mp_Next;
-	unsigned int c=0,c2=0,c3=0;
+	//declares the counters and the auxiliar variables
+	unsigned int c=0,c2=0,c3=0,aux=0,aux2=0;
+	//run the memory pool
 	while(allcheck<mt_Sentinel){
+		//if the area is free the vector freecheck will point to the next free area and paint this area with green
 		if(allcheck ==freecheck){
-
-			c=0;
-			while(allcheck->Lenght>c){
-				c++;
-			}
-			if(c2+c>63){
-				rect.setPosition(5+c2*20,5+c3*25);
-				c2=c2+c;
-				c=63-(c2-c);
-				c2=c2-63;
-				rect.setSize(sf::Vector2f(20*c, 20));
-				rect.setFillColor(sf::Color(0,255,0));
-				rect.setOutlineColor(sf::Color(255,255,255));
-				rect.setOutlineThickness(1);
-				janela.draw( rect);
-
-				c3++;
-
-				rect.setSize(sf::Vector2f(20*c2, 20));
-				rect.setPosition(5+0*20,5+c3*25);
-				janela.draw( rect);
-				allcheck=(allcheck+allcheck->Lenght);
-				freecheck=freecheck->mp_Next;
-			}
-			else{
-				rect.setSize(sf::Vector2f(20*c, 20));
-				rect.setFillColor(sf::Color(0,255,0));
-				rect.setOutlineColor(sf::Color(0,0,0));
-				rect.setOutlineThickness(1);
-				rect.setPosition(5+c2*20,5+c3*25);
-				janela.draw( rect);
-				allcheck=(allcheck+allcheck->Lenght);
-				freecheck=freecheck->mp_Next;
-				c2=c2+c;
-			}
+			rect.setFillColor(sf::Color(0,255,0));
+			freecheck=freecheck->mp_Next;
 		}
+		//if the area isn't free paint it with red
 		else{
-			c=0;
-			while(allcheck->Lenght>c){
-				c++;
-			}
-			if(c2+c>63){
-				rect.setPosition(5+c2*20,5+c3*25);
-				c2=c2+c;
-				c=63-(c2-c);
-				c2=c2-63;
-				rect.setSize(sf::Vector2f(20*c, 20));
-				rect.setFillColor(sf::Color(255,0,0));
-				rect.setOutlineColor(sf::Color(255,255,255));
-				rect.setOutlineThickness(1);
-				janela.draw( rect);
-
-				c3++;
-
-				rect.setSize(sf::Vector2f(20*c2, 20));
-				rect.setPosition(5+0*20,5+c3*25);
-				janela.draw( rect);
-				allcheck=(allcheck+allcheck->Lenght);
-			}
-			rect.setSize(sf::Vector2f(20*c, 20));
 			rect.setFillColor(sf::Color(255,0,0));
+		}
+
+		c=0;
+		//discover the size of the block
+		while(allcheck->Lenght>c){
+			c++;
+		}
+		//if it gets to the end of the line then jump to the next line
+		if(c2==63){
+			c2=0;
+			c3++;
+		}
+		//if the block it too big for the rest of the line then divide it in minor blocks
+		if(c2+c>63){
+			aux=c2+c;
+			c=63-(aux-c);
+			//define the rectangle
+			rect.setOutlineColor(sf::Color(255,255,255));
+			rect.setOutlineThickness(1);
+			rect.setPosition(5+c2*20,5+c3*25);
+			rect.setSize(sf::Vector2f(20*c, 20));
+			janela.draw( rect);
+			//if c is less than 63 then jump a line
+			if(c<63){
+				c3++;
+			}
+			//while the area still has blocks left keep dividing them to fit the lines and then put them in their place in the lines
+			while(c>0){
+				if(c>=63){
+					c3++;
+				}
+				aux2 = c;
+				c=aux-(c2+c);
+				aux = c;
+				c2=0;
+				if(c>=63){
+					c= 63;
+				}
+				rect.setPosition(5+0*20,5+c3*25);
+				rect.setSize(sf::Vector2f(20*c, 20));
+				janela.draw( rect);
+				}
+			c2=aux2;
+			//go to the next area
+			allcheck=(allcheck+allcheck->Lenght);
+		}
+		//if the block fits the line do
+		else{
+			//define the rectangle
+			rect.setSize(sf::Vector2f(20*c, 20));
 			rect.setOutlineColor(sf::Color(0,0,0));
 			rect.setOutlineThickness(1);
 			rect.setPosition(5+c2*20,5+c3*25);
 			janela.draw( rect);
+			//go to the next area
 			allcheck=(allcheck+allcheck->Lenght);
 			c2=c2+c;
 		}
-
-
 	}
+	//if it gets to the end of the line then jump to the next line
+	if(c2==63){
+		c2=0;
+		c3++;
+	}
+	//adds the sentinel block
+	rect.setSize(sf::Vector2f(20, 20));
+	rect.setFillColor(sf::Color(0,255,0));
+	rect.setOutlineColor(sf::Color(0,0,0));
+	rect.setOutlineThickness(1);
+	rect.setPosition(5+c2*20,5+c3*25);
+	janela.draw( rect);
 
+	//display the graphics
 	janela.display();
 }
 
