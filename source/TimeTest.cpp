@@ -111,17 +111,18 @@ void NewAlloc(std::size_t _timeLimit){
 int main (){
 
 	StoragePool* p;
-	std::size_t  memSize = 2000000000;
+	std::size_t  memoSize = 20000000000;
 	auto start = std::chrono::steady_clock::now();
 	auto end = std::chrono::steady_clock::now();
 	auto dif = end - start;
-	for (size_t i = 10; i < 1000000; i = i * 10)
+	for (size_t i = 10; i < 10000000; i = i * 10)
 	{
+		memoSize = i*2000;
 		std::cout<<">>>Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
-		std::cout<<">>>Creating a SLLPool with " << memSize << "bytes\n";
+		std::cout<<">>>Creating a SLLPool with " << memoSize << "bytes\n";
 		for (int j = 0; j < 10; ++j)
 		{
-			p = new SLLPool (memSize);
+			p = new SLLPool (memoSize);
 			start = std::chrono::steady_clock::now();
 			StoragePoolTest(*p, i);
 			end = std::chrono::steady_clock::now();
@@ -135,10 +136,10 @@ int main (){
 
 
 		std::cout<<">>>Starting Time Test of BestSLLPool with " << i <<"interactions:" <<"\n";
-		std::cout<<">>>Creating a BestSLLPool with " << memSize << "bytes\n";
+		std::cout<<">>>Creating a BestSLLPool with " << memoSize << "bytes\n";
 		for (int j = 0; j < 10; ++j)
 		{
-			p = new BestSLLPool (memSize);
+			p = new BestSLLPool (memoSize);
 
 			start = std::chrono::steady_clock::now();
 			StoragePoolTest(*p, i);
@@ -151,7 +152,7 @@ int main (){
 			delete p;
 		}
 		
-
+		/*
 		std::cout<<">>>Starting Time Test of STL Heap Alloc with " << i <<"interactions:" <<"\n";
 		
 		for (int j = 0; j < 10; ++j)
@@ -159,16 +160,16 @@ int main (){
 			start = std::chrono::steady_clock::now();
 
 
-		NewAlloc(i);
+			NewAlloc(i);
 
-		end = std::chrono::steady_clock::now();
-		dif = end - start;
+			end = std::chrono::steady_clock::now();
+			dif = end - start;
 
-		std::cout<<">>>STL Heap Alloc used :";
-		std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
-		std::cout<<"\n";
+			std::cout<<">>>STL Heap Alloc used :";
+			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
+			std::cout<<"\n";
 		}
-
+		*/
 		
 
 	}
