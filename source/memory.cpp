@@ -14,12 +14,12 @@ SLLPool::SLLPool(std::size_t bytes){
 	// \brief Sentinel Block
 	NumberOfBlocks++;
 
-	std::cout<<"Number Of Blocks: "<<NumberOfBlocks<<"\n";
+	//std::cout<<"Number Of Blocks: "<<NumberOfBlocks<<"\n";
 
 	// \brief Creats an array of blocks to be used as memory pool
 	this->mp_Pool = new Block[NumberOfBlocks];
 
-	std::cout<<"mp_Pool Adress: "<<mp_Pool<<"\n";
+	//std::cout<<"mp_Pool Adress: "<<mp_Pool<<"\n";
 	
 	// \briefDictates the number of nodes to the Head's list node
 	this->mp_Pool[0].Lenght = FreeBlocks;
@@ -126,7 +126,7 @@ SLLPool::Allocate(std::size_t bytes){
 	{
 		BlocksNeed++;
 	}
-	std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
+	//std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
 	//Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = mt_Sentinel->mp_Next;
 
@@ -136,7 +136,7 @@ SLLPool::Allocate(std::size_t bytes){
 	//Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != nullptr){
 
-		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
+		//std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
 
 		if (_rhs->Lenght == BlocksNeed )
 		{
@@ -150,14 +150,14 @@ SLLPool::Allocate(std::size_t bytes){
 
 		if (_rhs->Lenght > BlocksNeed)
 		{
-			std::cout<<_rhs->Lenght<<"\n";
+			//std::cout<<_rhs->Lenght<<"\n";
 			//Determine the Lenght of new empty block
 			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
 
 			//How many blocks allocated
 			_rhs->Lenght = BlocksNeed;
 
-			std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
+			//std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
 			//Determine Mp-next, next empt space
 			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
 
@@ -195,8 +195,8 @@ SLLPool::Free(void * fre){
 	//
 	Block* now = static_cast<Block*>(reinterpret_cast<Header*>(fre) - 1u);
 	//stub
-	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
-	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
+	//std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
+	//std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
 	
 	Block* prev;
 	Block* next;
@@ -238,7 +238,7 @@ BestSLLPool::Allocate(std::size_t bytes){
 		BlocksNeed++;
 	}
 
-	std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
+	//std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
 	//Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = mt_Sentinel->mp_Next;
 
@@ -254,7 +254,7 @@ BestSLLPool::Allocate(std::size_t bytes){
 	//Loop until find empty block with enought space to fit user's stuff
 	while(_rhs != nullptr){
 
-		std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
+		//std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
 
 		if (_rhs->Lenght == BlocksNeed )
 		{
@@ -288,7 +288,7 @@ BestSLLPool::Allocate(std::size_t bytes){
 		//Quantidade de Blocos a serem alocados
 		difPointer->Lenght = BlocksNeed;
 
-		std::cout<<"Next Empty Block Adress after allocation: "<<(difPointer+BlocksNeed)<<"\n";
+		//std::cout<<"Next Empty Block Adress after allocation: "<<(difPointer+BlocksNeed)<<"\n";
 		//Determine Mp-next, next empt space
 		(difPointer+BlocksNeed)->mp_Next = difPointer->mp_Next;
 
@@ -303,7 +303,7 @@ BestSLLPool::Allocate(std::size_t bytes){
 	//Throw Bad_alloc if MemoryPull can't fit the memory request
 	else
 		throw std::bad_alloc();
-	std::cout<<"bug";
+	//std::cout<<"bug";
 	return nullptr;
 
 
