@@ -111,40 +111,49 @@ void NewAlloc(std::size_t _timeLimit){
 int main (){
 
 	StoragePool* p;
-
-	for (size_t i = 10; i < 1000000; i = i * 10)
+	std::size_t  memSize = 2000000000;
+	for (size_t i = 10; i < 10000000; i = i * 10)
 	{
-		std::cout<<"Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
-		std::cout<<"Creating a S";
-		p = new SLLPool (2000000000);
+		std::cout<<">>>Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
+		std::cout<<">>>Creating a SLLPool with " << memSize << "bytes\n";
+
+		p = new SLLPool (memSize);
 		auto start = std::chrono::steady_clock::now();
-		StoragePoolTest(*p, 1000000);
+		StoragePoolTest(*p, i);
 		auto end = std::chrono::steady_clock::now();
 		auto dif = end - start;
-
+		std::cout<<">>>SLLPool used :";
 		std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
+		std::cout<<" >>>Deleting SLLPool \n\n";
 		delete p;
 
-		p = new BestSLLPool (2000000000);
+
+		std::cout<<">>>Starting Time Test of BestSLLPool with " << i <<"interactions:" <<"\n";
+		std::cout<<">>>Creating a BestSLLPool with " << memSize << "bytes\n";
+
+		p = new BestSLLPool (memSize);
 
 		start = std::chrono::steady_clock::now();
-		StoragePoolTest(*p, 1000000);
+		StoragePoolTest(*p, i);
 		end = std::chrono::steady_clock::now();
 		dif = end - start;
+		std::cout<<">>>BestSLLPool used :";
 		std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
+		std::cout<<" >>>Deleting SLLPool \n\n";
 
+		delete p;
 
-
-		
-
+		std::cout<<">>>Starting Time Test of STL Heap Alloc with " << i <<"interactions:" <<"\n";
 		start = std::chrono::steady_clock::now();
 
-		NewAlloc(1000000);
+		NewAlloc(i);
 
 		end = std::chrono::steady_clock::now();
 		dif = end - start;
+
+		std::cout<<">>>STL Heap Alloc used :";
 		std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
-		
+		std::cout<<"\n";
 
 	}
 
