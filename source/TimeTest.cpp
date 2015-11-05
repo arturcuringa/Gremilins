@@ -162,7 +162,7 @@ int main (){
 			delete p;
 		}
 		
-		// \brief Stl Head test
+		
 		std::cout<<">>>Starting Time Test of STL Heap Alloc with " << i <<"interactions:" <<"\n";
 		
 		for (int j = 0; j < 10; ++j)

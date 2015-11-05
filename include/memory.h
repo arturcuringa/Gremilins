@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <new>
 #include <exception>
-
+#include <math.h>
 
 class StoragePool{
 	

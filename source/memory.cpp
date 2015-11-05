@@ -121,21 +121,24 @@ void*
 SLLPool::Allocate(std::size_t bytes){
 
 	//Calculats the numbers of blocks needed
-	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
-	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
-	{
-		BlocksNeed++;
-	}
+	unsigned int BlocksNeed = std::ceil ( (bytes+ sizeof(Header))/sizeof(Block) );
 	//std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
 	//Block Pointer Right Had side -> Selected Block 
 	Block* _rhs = mt_Sentinel->mp_Next;
 
 	//Block Pointer Ledft Hand Side -> Previous selected Block
 	Block* _lhs  = mt_Sentinel;
-	
-	//Loop until find empty block with enought space to fit user's stuff
-	while(_rhs != nullptr){
 
+
+	//Loop until find empty block with enought space to fit user's stuff
+	while(_rhs->Lenght < BlocksNeed){
+
+		//Points to previous Block
+		_lhs = _rhs;
+
+		//Points to Next empty block 
+		_rhs = _rhs->mp_Next;
+	}
 		//std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
 
 		if (_rhs->Lenght == BlocksNeed )
@@ -150,19 +153,19 @@ SLLPool::Allocate(std::size_t bytes){
 
 		if (_rhs->Lenght > BlocksNeed)
 		{
-			//std::cout<<_rhs->Lenght<<"\n";
+			Block * resz = _rhs+BlocksNeed;
 			//Determine the Lenght of new empty block
-			(_rhs+BlocksNeed)->Lenght = _rhs->Lenght - BlocksNeed;
+			resz->Lenght = _rhs->Lenght - BlocksNeed;
 
 			//How many blocks allocated
 			_rhs->Lenght = BlocksNeed;
 
 			//std::cout<<"Next Empty Block Adress after allocation: "<<(_rhs+BlocksNeed)<<"\n";
 			//Determine Mp-next, next empt space
-			(_rhs+BlocksNeed)->mp_Next = _rhs->mp_Next;
+			resz->mp_Next = _rhs->mp_Next;
 
 			//Make conecton between previous and next Block
-			_lhs->mp_Next = (_rhs+BlocksNeed);
+			_lhs->mp_Next = resz;
 			
 			/*Return the exatc location to user data by converting _rhs to Header*
 				add +1 and converting to void *
@@ -170,17 +173,6 @@ SLLPool::Allocate(std::size_t bytes){
 			return static_cast<void*>(reinterpret_cast<Header*>(_rhs) + 1u );
 		}
 
-
-
-		//Points to previous Block
-		_lhs = _rhs;
-
-		//Points to Next empty block 
-		_rhs = _rhs->mp_Next;
-
-
-
-	}
 	//Throw Bad_alloc if MemoryPull can't fit the memory request
 	
 	if (_rhs == nullptr)
@@ -189,15 +181,9 @@ SLLPool::Allocate(std::size_t bytes){
 	return nullptr;
 }
 
-
 void
 SLLPool::Free(void * fre){
-	//
 	Block* now = static_cast<Block*>(reinterpret_cast<Header*>(fre) - 1u);
-	//stub
-	//std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
-	//std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
-	
 	Block* prev;
 	Block* next;
 	prev = mt_Sentinel;
@@ -207,36 +193,28 @@ SLLPool::Free(void * fre){
 		prev = next;
 		next = next->mp_Next;
 	}
-	if((now+now->Lenght)==next){
-		now->Lenght = now->Lenght + next->Lenght;
-		now->mp_Next = next->mp_Next;
-	}
-	else{
-		now->mp_Next = next;
-	}
 	if((prev+prev->Lenght)==now){
 		prev->Lenght = now->Lenght + prev->Lenght;
-		prev->mp_Next = now->mp_Next;
+		now = prev;
 	}
 	else{
 		prev->mp_Next = now;
 	}
-	
-
-
-	
-	//now = nullptr;
+	if((now+now->Lenght)==next){
+		now->Lenght = now->Lenght + next->Lenght;
+		now->mp_Next = next->mp_Next;
+		
+	}
+	else{
+		now->mp_Next = next;
+	}
 	return ;
 }
 void *
 BestSLLPool::Allocate(std::size_t bytes){
 
 	//Calculats the numbers of blocks needed
-	unsigned int BlocksNeed = (bytes+ sizeof(Header))/sizeof(Block);
-	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
-	{
-		BlocksNeed++;
-	}
+	unsigned int BlocksNeed = std::ceil ( (bytes+ sizeof(Header))/sizeof(Block) );
 
 	//std::cout << "Bytes : " << bytes << "\n Blocks Need: " << BlocksNeed << "\n";
 	//Block Pointer Right Had side -> Selected Block 
