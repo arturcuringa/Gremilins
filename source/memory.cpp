@@ -4,11 +4,8 @@
 SLLPool::SLLPool(std::size_t bytes){
 	
 	// \brief By the size passed in the constructor, calculates the number of bocks 	
-	this->NumberOfBlocks = (bytes+ sizeof(Header))/sizeof(Block);
-	if ((bytes+ sizeof(Header))%sizeof(Block) != 0)
-	{
-		NumberOfBlocks++;
-	}
+	this->NumberOfBlocks = std::ceil ( (bytes+ sizeof(Header))/sizeof(Block) );
+	
 
 	unsigned int FreeBlocks = NumberOfBlocks;
 	// \brief Sentinel Block
@@ -131,7 +128,7 @@ SLLPool::Allocate(std::size_t bytes){
 
 
 	//Loop until find empty block with enought space to fit user's stuff
-	while(_rhs->Lenght < BlocksNeed){
+	while(_rhs != nullptr && _rhs->Lenght < BlocksNeed){
 
 		//Points to previous Block
 		_lhs = _rhs;
@@ -140,6 +137,9 @@ SLLPool::Allocate(std::size_t bytes){
 		_rhs = _rhs->mp_Next;
 	}
 		//std::cout<<"_rhs Current Adress: "<<_rhs<<"\n";
+		
+	if (_rhs == nullptr)
+		throw std::bad_alloc();
 
 		if (_rhs->Lenght == BlocksNeed )
 		{
@@ -175,8 +175,6 @@ SLLPool::Allocate(std::size_t bytes){
 
 	//Throw Bad_alloc if MemoryPull can't fit the memory request
 	
-	if (_rhs == nullptr)
-		throw std::bad_alloc();
 	
 	return nullptr;
 }

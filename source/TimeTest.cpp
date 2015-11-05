@@ -2,8 +2,12 @@
 #include "memory.h"
 #include "Operators.h"
 #include <cstdlib>
+#include <stdlib.h>
 #include <queue>
 #include <chrono>
+
+
+
 
 // \brief Class Event with realease time and void pointer to allocate
 class Events{
@@ -15,13 +19,13 @@ class Events{
 
 // \brief  Generates a random number [100,2000]
 unsigned int RandomSize(){
-	
+	srand (1);
 	return rand() % 2000 + 100;
 
 }
 // \brief Generates random number [1,100]
 unsigned int TimeRandom(){
-	
+	 srand (2);
 	return rand() % 100 +1;
 }
 
@@ -113,8 +117,6 @@ void NewAlloc(std::size_t _timeLimit){
 
 int main (){
 	// \brief Pointer to any memory pool
-	StoragePool* p;
-
 	std::size_t  memoSize = 0;
 
 	// \brief Time control
@@ -122,25 +124,24 @@ int main (){
 	auto end = std::chrono::steady_clock::now();
 	auto dif = end - start;
 
-	for (size_t i = 10; i < 10000000; i = i * 10)
-	{
+		
+		std::size_t i = 10000000;
 		// \brief Creates a big memory pull
-		memoSize = i*2000;
+		memoSize = 200000;
 
 		// \brief SLLPool Test
 		std::cout<<">>>Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
 		std::cout<<">>>Creating a SLLPool with " << memoSize << "bytes\n";
 		for (int j = 0; j < 10; ++j)
 		{
-			p = new SLLPool (memoSize);
+			SLLPool  z(memoSize);
 			start = std::chrono::steady_clock::now();
-			StoragePoolTest(*p, i);
+			StoragePoolTest(z, i);
 			end = std::chrono::steady_clock::now();
 			dif = end - start;
 			std::cout<<">>>SLLPool used :";
 			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
 			std::cout<<" >>>Deleting SLLPool \n\n";
-			delete p;
 		}
 		
 
@@ -149,17 +150,16 @@ int main (){
 		std::cout<<">>>Creating a BestSLLPool with " << memoSize << "bytes\n";
 		for (int j = 0; j < 10; ++j)
 		{
-			p = new BestSLLPool (memoSize);
+			BestSLLPool x(memoSize);
 
 			start = std::chrono::steady_clock::now();
-			StoragePoolTest(*p, i);
+			StoragePoolTest(x, i);
 			end = std::chrono::steady_clock::now();
 			dif = end - start;
 			std::cout<<">>>BestSLLPool used :";
 			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
 			std::cout<<" >>>Deleting SLLPool \n\n";
 
-			delete p;
 		}
 		
 		
@@ -180,9 +180,6 @@ int main (){
 			std::cout<<"\n";
 		}
 		
-		
-
-	}
 
 	
 
