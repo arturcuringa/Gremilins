@@ -5,6 +5,7 @@
 #include <queue>
 #include <chrono>
 
+// \brief Class Event with realease time and void pointer to allocate
 class Events{
 	public:
 	std::size_t releaseTime;
@@ -12,22 +13,24 @@ class Events{
 	Events(std::size_t timepam, void* Alocprt) : releaseTime(timepam), Aloc(Alocprt) {}
 };
 
+// \brief  Generates a random number [100,2000]
 unsigned int RandomSize(){
 	
 	return rand() % 2000 + 100;
 
 }
-
+// \brief Generates random number [1,100]
 unsigned int TimeRandom(){
 	
 	return rand() % 100 +1;
 }
 
+// \brief Funtor to compare Events by RealeaseTime
  struct comp{
 
 	bool operator () (Events& a , Events &b){
 
-		if (a.releaseTime <= b.releaseTime)
+		if (a.releaseTime > b.releaseTime)
 		{
 			return true;
 		}
@@ -37,7 +40,7 @@ unsigned int TimeRandom(){
 };
 
 
-
+// \brief Simulates a heavy and random load to memory pull
 void StoragePoolTest( StoragePool& _pool,std::size_t _timeLimit ){
 	
 	std::priority_queue<Events, std::vector<Events>, comp> pq;
@@ -72,7 +75,7 @@ void StoragePoolTest( StoragePool& _pool,std::size_t _timeLimit ){
 
 
 }
-
+// \brief Similar to StoragePoolTest, test with stl malloc and free
 void NewAlloc(std::size_t _timeLimit){
 
 	std::priority_queue<Events, std::vector<Events>, comp> pq;
@@ -109,15 +112,22 @@ void NewAlloc(std::size_t _timeLimit){
 }
 
 int main (){
-
+	// \brief Pointer to any memory pool
 	StoragePool* p;
-	std::size_t  memoSize = 20000000000;
+
+	std::size_t  memoSize = 0;
+
+	// \brief Time control
 	auto start = std::chrono::steady_clock::now();
 	auto end = std::chrono::steady_clock::now();
 	auto dif = end - start;
+
 	for (size_t i = 10; i < 10000000; i = i * 10)
 	{
+		// \brief Creates a big memory pull
 		memoSize = i*2000;
+
+		// \brief SLLPool Test
 		std::cout<<">>>Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
 		std::cout<<">>>Creating a SLLPool with " << memoSize << "bytes\n";
 		for (int j = 0; j < 10; ++j)
@@ -134,7 +144,7 @@ int main (){
 		}
 		
 
-
+		// \brief BestSLLPool Test
 		std::cout<<">>>Starting Time Test of BestSLLPool with " << i <<"interactions:" <<"\n";
 		std::cout<<">>>Creating a BestSLLPool with " << memoSize << "bytes\n";
 		for (int j = 0; j < 10; ++j)
@@ -152,7 +162,7 @@ int main (){
 			delete p;
 		}
 		
-		/*
+		// \brief Stl Head test
 		std::cout<<">>>Starting Time Test of STL Heap Alloc with " << i <<"interactions:" <<"\n";
 		
 		for (int j = 0; j < 10; ++j)
@@ -169,7 +179,7 @@ int main (){
 			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
 			std::cout<<"\n";
 		}
-		*/
+		
 		
 
 	}
