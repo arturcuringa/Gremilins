@@ -41,40 +41,136 @@ SLLPool::~SLLPool(){
 }
 void 
 SLLPool::Barprint(sf::RenderWindow &janela){
-	sf::RectangleShape rectangle[NumberOfBlocks];
+	//declares the rectangle
+	sf::RectangleShape rect;
+	sf::Text gang;
+	sf::Font fonte;
+	if(!fonte.loadFromFile("source/data/AlteHaasGroteskBold.ttf")) {
+		exit(EXIT_FAILURE);
+	}
+
+	fonte.loadFromFile("source/data/AlteHaasGroteskBold.ttf");
+	//gang.setString("THE END\n(press E to end)");
+	gang.setFont(fonte);			
+	//gang.setPosition((20*nCol/4),10*nLin);
+	//janela.draw(gang);	
+
+
+
+	//clear the window
+	janela.clear(sf::Color(0,0,0));
+	//declares 2 vectors to run the memory pool
 	Block *freecheck;
 	Block *allcheck;
+	//define the vectors initial value
 	allcheck=mp_Pool;
+	std::string Number;
 	freecheck=mt_Sentinel->mp_Next;
-	unsigned int c=0;
-	std::cout<<"\n";
+	std::stringstream stream;
+	gang.setCharacterSize(10);
+	gang.setColor(sf::Color(0,0,0));
+	//declares the counters and the auxiliar variables
+	unsigned int c=0,c2=0,c3=0,aux=0,aux2=0,c4=0;
+	//run the memory pool
 	while(allcheck<mt_Sentinel){
+		//if the area is free the vector freecheck will point to the next free area and paint this area with green
 		if(allcheck ==freecheck){
-			std::cout<<" |"<<allcheck->Lenght;
-			while(allcheck->Lenght>c){
-				c++;
-				std::cout<<" -";
-			}
-			c=0;
-			std::cout<<"|";
-			allcheck=(allcheck+allcheck->Lenght);
+			rect.setFillColor(sf::Color(0,255,0));
 			freecheck=freecheck->mp_Next;
+			c4++;
+			Number.clear();
+			stream.str("");
+			stream << c4;
+			std::cout<<c4;
+			Number = stream.str();
+			//Number="abut";
+			gang.setPosition(5+c2*20,3+c3*25);
+			gang.setString(Number);	
 		}
+		//if the area isn't free paint it with red
 		else{
-			std::cout<<" |"<<allcheck->Lenght;
-			while(allcheck->Lenght>c){
-				c++;
-				std::cout<<" +";
+			rect.setFillColor(sf::Color(255,0,0));
+		}
+
+		c=0;
+		//discover the size of the block
+		while(allcheck->Lenght>c){
+			c++;
+		}
+		//if it gets to the end of the line then jump to the next line
+		if(c2==63){
+			c2=0;
+			c3++;
+		}
+		//if the block it too big for the rest of the line then divide it in minor blocks
+		if(c2+c>63){
+			aux=c2+c;
+			c=63-(aux-c);
+			//define the rectangle
+			rect.setOutlineColor(sf::Color(255,255,255));
+			rect.setOutlineThickness(1);
+			rect.setPosition(5+c2*20,5+c3*25);
+			rect.setSize(sf::Vector2f(20*c, 20));
+			janela.draw( rect);
+			janela.draw(gang);
+			
+			//if c is less than 63 then jump a line
+			if(c<63){
+				c3++;
 			}
-			c=0;
-			std::cout<<"|";
+			//while the area still has blocks left keep dividing them to fit the lines and then put them in their place in the lines
+			while(c>0){
+				if(c>=63){
+					c3++;
+				}
+				aux2 = c;
+				c=aux-(c2+c);
+				aux = c;
+				c2=0;
+				if(c>=63){
+					c= 63;
+				}
+				rect.setPosition(5+0*20,5+c3*25);
+				rect.setSize(sf::Vector2f(20*c, 20));
+				janela.draw( rect);
+				janela.draw(gang);
+				}
+			c2=aux2;
+			//go to the next area
 			allcheck=(allcheck+allcheck->Lenght);
 		}
-
+		//if the block fits the line do
+		else{
+			//define the rectangle
+			rect.setSize(sf::Vector2f(20*c, 20));
+			rect.setOutlineColor(sf::Color(0,0,0));
+			rect.setOutlineThickness(1);
+			rect.setPosition(5+c2*20,5+c3*25);
+			janela.draw( rect);
+			janela.draw(gang);
+			//go to the next area
+			allcheck=(allcheck+allcheck->Lenght);
+			c2=c2+c;
+		}
 	}
-	std::cout<<" |BLOCO SENTINEL:1 -|\n\n";
+	//if it gets to the end of the line then jump to the next line
+	if(c2==63){
+		c2=0;
+		c3++;
+	}
+	//adds the sentinel block
+	rect.setSize(sf::Vector2f(20, 20));
+	rect.setFillColor(sf::Color(0,255,0));
+	rect.setOutlineColor(sf::Color(0,0,0));
+	rect.setOutlineThickness(1);
+	rect.setPosition(5+c2*20,5+c3*25);
+	gang.setPosition(5+c2*20,3+c3*25);
+	gang.setString("0");	
+	janela.draw( rect);
+	janela.draw( gang);
 
-
+	//display the graphics
+	janela.display();
 }
 
 void
@@ -83,17 +179,18 @@ SLLPool::PoolPrint(){
 	Block *allcheck;
 	allcheck=mp_Pool;
 	freecheck=mt_Sentinel->mp_Next;
-	unsigned int c=0;
+	unsigned int c=0,c4=0;
 	std::cout<<"\n";
 	while(allcheck<mt_Sentinel){
 		if(allcheck ==freecheck){
+			c4++;
 			std::cout<<" |"<<allcheck->Lenght;
 			while(allcheck->Lenght>c){
 				c++;
 				std::cout<<" -";
 			}
 			c=0;
-			std::cout<<"|";
+			std::cout<<"(bloco livre numero: "<<c4<<")|";
 			allcheck=(allcheck+allcheck->Lenght);
 			freecheck=freecheck->mp_Next;
 		}
@@ -109,7 +206,7 @@ SLLPool::PoolPrint(){
 		}
 
 	}
-	std::cout<<" |BLOCO SENTINEL:1 -|\n\n";
+	std::cout<<" |BLOCO SENTINEL:1 -(bloco livre numero: 0)|\n\n";
 
 }
 
