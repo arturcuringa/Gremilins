@@ -58,14 +58,19 @@ DLPool::~DLPool(){
 
 void
 DLPool::PoolPrint(){
+	// \brief declares 2 pointers, freecheck to run the list and allcheck to run all the headers
 	Block *freecheck;
 	Block *allcheck;
+	// \brief define the pointers initial value, allcheck points to the first Block of the pool after the sentinel and freecheck points to the sentinel->mp_Next
 	allcheck=mp_Pool + 1;
 	freecheck=mt_Sentinel->mp_Next;
-	unsigned int c=0;
-	std::cout<<"\n";
-	std::cout<<" |BLOCO SENTINEL:1 -|";
+	// \brief declares the counters
+	unsigned int c=0,c4=0;
+	// \brief jump a line and Print the sentinel block
+	std::cout<<"\n |BLOCO SENTINEL:1 -(bloco livre numero: 0)|";
+	// \brief run the memory pool
 	while(allcheck<mt_Tail){
+		// \brief if the area is free print the block size with the symbol "-" and position on the list
 		if(allcheck ==freecheck){
 			std::cout<<" |"<<allcheck->Lenght;
 			while(allcheck->Lenght>c){
@@ -73,10 +78,13 @@ DLPool::PoolPrint(){
 				std::cout<<" -";
 			}
 			c=0;
-			std::cout<<"|";
+			c4++;
+			std::cout<<"(bloco livre numero: "<<c4<<")|";
+			// \brief allcheck goes to the next header and freecheck goes to the next free Block
 			allcheck=(allcheck+allcheck->Lenght);
 			freecheck=freecheck->mp_Next;
 		}
+		// \brief if the area is free print the block size with the symbol "+" to say its not free
 		else{
 			std::cout<<" |"<<allcheck->Lenght;
 			while(allcheck->Lenght>c){
@@ -85,11 +93,14 @@ DLPool::PoolPrint(){
 			}
 			c=0;
 			std::cout<<"|";
+			// \brief allcheck goes to the next header
 			allcheck=(allcheck+allcheck->Lenght);
 		}
 
-	}
-		std::cout<<" |BLOCO TAIL:1 -|\n";
+	}	
+		c4++;
+		// \brief Print the tail block
+		std::cout<<" |BLOCO TAIL:1 -(bloco livre numero: "<<c4<<")|\n";
 
 }
 
@@ -171,32 +182,33 @@ void
 DLPool::Free(void * fre){
 	// \brief Convert void Poiner to Block Pointer after reduces 1u of Head
 	Block* now = static_cast<Block*>(reinterpret_cast<Header*>(fre) - 1u);
-	
-	std::cout<<"Bloco a ser deletado adress: "<< now<<std::endl;
-	std::cout<< "Tamanho do bloco a ser deletado: " << now->Lenght <<"\n";
+	// \brief declare a pointer to run the list
 	Block* next;
+	// \brief set the pointer to point to sentinel->mp_Next
 	next = mt_Sentinel->mp_Next;
-	//runs the list untill fre is between prev and next or till next gets to the end of the list
+	//runs the list untill next has a bigger adress than now
 	while( next<now && next!=mt_Tail ){
 		next = next->mp_Next;
 	}
-
+	// \brief if next->mp_Prev and now touches then combine them and now points to prev
 	if(( next->mp_Prev + next->mp_Prev->Lenght)==now && next->mp_Prev!=mt_Sentinel){
-		
 		next->mp_Prev->Lenght = now->Lenght + next->mp_Prev->Lenght;
 		now = next->mp_Prev;
 		
 	}
+	// \brief if now and prev has any Block between them, then prev->mp_Next will point to now and now->mp_Prev will point to next->mp_Prev
 	else{
 		next->mp_Prev->mp_Next = now;
 		now->mp_Prev=next->mp_Prev;
 	}
+	// \brief if prev and now touches then combine them
 	if((now+now->Lenght)==next && next!=mt_Tail){
 		now->Lenght = now->Lenght + next->Lenght;
 		now->mp_Next = next->mp_Next;
 		next->mp_Next->mp_Prev=now;
 
 	}
+	// \brief if now and next has any Block between them, then now->mp_Next will point to next and next->mp_Prev will point to now
 	else{
 		now->mp_Next=next;
 		next->mp_Prev=now;

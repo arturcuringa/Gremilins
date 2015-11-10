@@ -21,28 +21,28 @@ std::cout<<" continuar?\n";
 }
 
 int main (){
-	//sf::RenderWindow janela(sf::VideoMode( 1280 , 720),"Memory pool test");
+	sf::RenderWindow janela(sf::VideoMode( 1280 , 720),"Memory pool test");
 	SLLPool Tri(44);
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 	if(flag()==false){
 		return 0;
 	}
 
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	int *a = new(Tri) int;
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	int *b = new(Tri) int;
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	int *c = new(Tri) int;
@@ -51,7 +51,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando um bloco\n";
 	delete a;
@@ -60,7 +60,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	a = new(Tri) int;
@@ -69,7 +69,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando um bloco\n";
 	delete b;
@@ -78,7 +78,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	b = new(Tri) int;
@@ -87,7 +87,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 	
 	std::cout<<"Deletando um bloco\n";
 	delete b;
@@ -96,7 +96,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 	
 	std::cout<<"Deletando um bloco\n";
 	delete a;
@@ -105,7 +105,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando 2 blocos\n";
 	a = new(Tri) int[5];
@@ -114,7 +114,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando 2 blocos\n";
 	delete[] a;
@@ -123,7 +123,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando um bloco\n";
 	delete c;
@@ -132,7 +132,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando 3 blocos\n";
 	a = new(Tri) int[9];
@@ -141,7 +141,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando 3 blocos\n";
 	delete a;
@@ -150,7 +150,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	a = new(Tri) int;
@@ -159,7 +159,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando 2 blocos\n";
 	b = new(Tri) int[5];
@@ -168,7 +168,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando um bloco\n";
 	delete a;
@@ -177,7 +177,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando 2 blocos\n";
 	delete b;
@@ -186,7 +186,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	a = new(Tri) int;
@@ -195,7 +195,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 	std::cout<<"Alocando um bloco\n";
 	b = new(Tri) int;
 	
@@ -203,7 +203,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Alocando um bloco\n";
 	c = new(Tri) int;
@@ -212,7 +212,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}	
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando um bloco\n";
 	delete a;
@@ -221,7 +221,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando um bloco\n";
 	delete c;
@@ -230,7 +230,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 
 	std::cout<<"Deletando um bloco\n";
 	delete b;
@@ -239,7 +239,7 @@ int main (){
 	if(flag()==false){
 		return 0;
 	}
-	Tri.PoolPrint();
+	Tri.Barprint(janela);
 	std::cout<<"Encerrando testes\n";
 	if(flag()==false){
 		return 0;
