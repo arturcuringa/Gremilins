@@ -2,7 +2,7 @@
 CXX = g++
 DELETAR = bin/rm
 CVERSION = -std=c++11 #-std=c++0x
-AVISA =-Wall
+AVISA =-Wall -O3
 
 OP = $(AVISA) $(CVERSION)
 SFMLOP = -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
@@ -14,7 +14,7 @@ DIRSRC = source/
 
 DRIVE =  drive_3block.cpp # drive_2block.cpp drive_oneblock.cpp  #main.cpp 
 
-TIME = TimeTest.cpp
+TIME =  TimeTest.cpp # drive_simulation.cpp #
 #######################################################TEST########################################################
 
 
@@ -31,7 +31,7 @@ roll:
 
 ########################################################TIMES TEST ############################
 time:
-	$(CXX) $(OP) -I $(DIRIN) $(DIRSRC)$(TIME) $(DIRSRC)memory.cpp -o bin/test $(SFMLOP)
+	$(CXX) $(OP) -I $(DIRIN) $(DIRSRC)$(TIME) $(DIRSRC)memory.cpp $(DIRSRC)DLPool.cpp -o bin/test $(SFMLOP)
 
 ##########################################################FIM######################################################################
 

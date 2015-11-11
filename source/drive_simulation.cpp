@@ -1,6 +1,7 @@
 //#include "SLPool.h"
 #include "memory.h"
 #include "Operators.h"
+#include "DLPool.h"
 #include <cstdlib>
 #include <ctime>
 #include <queue>
@@ -55,14 +56,14 @@ void StoragePoolTest( StoragePool & _pool, std::time_t _timeLimit ){
 
 int main() {
 
-	SLLPool p(500000000);
-	//SLPoolBF p {50000000};
-	StoragePoolTest(p, 1000000);
+	SLLPool p {500000000};
+	//BestSLLPool p {50000000};
+	StoragePoolTest(p, 100000);
 	auto average = chrono::steady_clock::now() - chrono::steady_clock::now();
 	for(int j = 0; j < 100; ++j){
 		auto start = chrono::steady_clock::now(); //Start the timer; 
 			
-		StoragePoolTest(p, 1000000);
+		StoragePoolTest(p, 100000);
 		auto end = chrono::steady_clock::now(); //Stop the timer;
 		average += (end - start); //Sum from current average plus the difference between end and start timers
 	}

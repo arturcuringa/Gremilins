@@ -19,13 +19,13 @@ class Events{
 
 // \brief  Generates a random number [100,2000]
 unsigned int RandomSize(){
-	srand (1);
+	
 	return rand() % 2000 + 100;
 
 }
 // \brief Generates random number [1,100]
 unsigned int TimeRandom(){
-	 srand (2);
+	
 	return rand() % 100 +1;
 }
 
@@ -46,7 +46,7 @@ unsigned int TimeRandom(){
 
 // \brief Simulates a heavy and random load to memory pull
 void StoragePoolTest( StoragePool& _pool,std::size_t _timeLimit ){
-	
+	srand(1);
 	std::priority_queue<Events, std::vector<Events>, comp> pq;
 
 	for (std::size_t i = 0; i < _timeLimit; ++i)
@@ -125,16 +125,17 @@ int main (){
 	auto dif = end - start;
 
 		
-		std::size_t i = 10000000;
+		std::size_t i = 100000;
 		// \brief Creates a big memory pull
-		memoSize = 200000;
+		memoSize = 2000 * 10000;
 
 		// \brief SLLPool Test
 		std::cout<<">>>Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
-		std::cout<<">>>Creating a SLLPool with " << memoSize << "bytes\n";
-		for (int j = 0; j < 10; ++j)
+		std::cout<<">>>Creating a SLLPool with " << memoSize << "bytes and using the same pool 30 times\n";
+		SLLPool  z(memoSize);
+		for (int j = 0; j < 30; ++j)
 		{
-			SLLPool  z(memoSize);
+			
 			start = std::chrono::steady_clock::now();
 			StoragePoolTest(z, i);
 			end = std::chrono::steady_clock::now();
@@ -144,13 +145,29 @@ int main (){
 			std::cout<<" >>>Deleting SLLPool \n\n";
 		}
 		
-
+		std::cout<<">>>Starting Time Test of SLLPool with " << i <<"interactions:" <<"\n";
+		std::cout<<">>>Creating a SLLPool with " << memoSize << "bytes and using a new pool 30 times\n";
+		
+		for (int j = 0; j < 30; ++j)
+		{
+			SLLPool  K(memoSize);
+			start = std::chrono::steady_clock::now();
+			StoragePoolTest(K, i);
+			end = std::chrono::steady_clock::now();
+			dif = end - start;
+			std::cout<<">>>SLLPool used :";
+			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
+			std::cout<<" >>>Deleting SLLPool \n\n";
+		}
+		
+		
 		// \brief BestSLLPool Test
 		std::cout<<">>>Starting Time Test of BestSLLPool with " << i <<"interactions:" <<"\n";
-		std::cout<<">>>Creating a BestSLLPool with " << memoSize << "bytes\n";
-		for (int j = 0; j < 10; ++j)
+		std::cout<<">>>Creating a BestSLLPool with " << memoSize << "bytes and using the same pool 30 times\n";
+		BestSLLPool x(memoSize);
+		for (int j = 0; j < 30; ++j)
 		{
-			BestSLLPool x(memoSize);
+			
 
 			start = std::chrono::steady_clock::now();
 			StoragePoolTest(x, i);
@@ -162,10 +179,28 @@ int main (){
 
 		}
 		
+		// \brief BestSLLPool Test
+		std::cout<<">>>Starting Time Test of BestSLLPool with " << i <<"interactions:" <<"\n";
+		std::cout<<">>>Creating a BestSLLPool with " << memoSize << "bytes and using a new pool 30 times\n";
+		
+		for (int j = 0; j < 30; ++j)
+		{
+			
+			BestSLLPool L(memoSize);
+			start = std::chrono::steady_clock::now();
+			StoragePoolTest(L, i);
+			end = std::chrono::steady_clock::now();
+			dif = end - start;
+			std::cout<<">>>BestSLLPool used :";
+			std::cout << std::chrono::duration <double, std::milli> (dif).count() << " ms" << std::endl;
+			std::cout<<" >>>Deleting SLLPool \n\n";
+
+		}
+
 		
 		std::cout<<">>>Starting Time Test of STL Heap Alloc with " << i <<"interactions:" <<"\n";
 		
-		for (int j = 0; j < 10; ++j)
+		for (int j = 0; j < 30; ++j)
 		{
 			start = std::chrono::steady_clock::now();
 

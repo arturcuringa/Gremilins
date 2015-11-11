@@ -1,6 +1,80 @@
-#############################READ ME#############################################
+#############################READ ME##########################################################
+GREMLINS - Artur M. Curinga Lucas de Medeiros Ferreira
+Professor: Selan Rodrigues
+
+This project is a Memory Manegment Based on Linked List and have 3 types:
+
+SLLPool : Simple Linked List Memory Pool using First Fir Strategy
+BestSLLPool : Simple Linked List Memory Pool using Best Fit Stretegy
+DLPool: Double Linked List Memory Pool using First Fit Strategy
+
+############################GREMLINS###########################################################
+
+Test Types:
+
+Visual Graphical Debug using SFML:
+
+Avaliable for SLLPool and BestSLLPool, where you can see in a SFML windown Green Bars for free areas and Red Bars as "Taken" ocupied memory. Every Area is numbered in List order.
+
+Text Debug:
+
+Avaliable for SLLPool and BestSLLPool, where there is  "-" sign representing the Free Blocks and "+" sign representing Used Block. 
+
+
+TimeTest:
+
+Avaliable for alll Pools, used to test random Alloc and Free, and simulates a real application and compare the time.
+
+###########################Test Samples########################################################
+
+One Block Test:
+File: dreive_oneblock.cpp
+
+Create a situation where all blocks (one) is used with the exact size.
 
 
 
 
-###################################################################################
+Two Block Test:
+File: drive_2block.cpp
+
+Create a situation where all possibles allocs and free are used
+
+
+
+Three Block Test:
+File: drive_3block.cpp
+
+Create all situation for 3 blocks with Visual Debug. Can be tested with makefile, just using make, and runing with make roll
+
+
+
+TimeTest:
+File:TimeTest.cpp
+
+USE O3 FOR COMPILING OPTMZATION!!!!!!
+
+This test is used to mesure time and see the pattern in memory pools, There are 2 test for SLLPool and BestSLLPool and One with stardard std::malloc and std::free.
+
+The first situation is a memory Pool used in 30 tests with random alloc and free with the same mem.Pool where you can see the fragmentation incresing time.
+
+The second is the same test but with a new memPool every test
+
+The same test is executed by OS.
+
+
+
+
+TimeTest Single Shot (Vinicius Campos e VitorRodrigues implemetation)
+File:drive_simulation.cpp
+
+USE O3 FOR COMPILING OPTMZATION!!!!!!
+
+Single test using a large memPool and checking Alloc and Free time of OS or mem Pool, to change the test target i'ts needed to uncomment the new and comment the other new operator 
+
+
+######################################Personal Notes##########################################
+
+The time test may have different results deppending of OS, type of PC, compiling mode.
+  
+ 
